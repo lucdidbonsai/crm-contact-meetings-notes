@@ -669,31 +669,51 @@
       color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px;
     }
     .mdp-template-divider { border: none; border-top: 1px solid var(--border-content); margin: 4px 0; }
+    /* Floating selection toolbar — hidden by default, shown on text select */
     .mdp-doc-toolbar {
-      display: flex; align-items: center; flex-wrap: wrap; gap: 1px;
-      padding: 7px 40px; border-bottom: 1px solid var(--border-content);
-      flex-shrink: 0; background: var(--bg-grey-fa);
-      margin-top: 10px;
+      position: fixed;
+      display: none;
+      align-items: center; flex-wrap: nowrap; gap: 0;
+      padding: 4px 8px;
+      background: #1e1e1e;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.32), 0 1px 4px rgba(0,0,0,0.18);
+      z-index: 1000;
+      pointer-events: auto;
+    }
+    .mdp-doc-toolbar.visible { display: flex; }
+    .mdp-doc-toolbar::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: none;
+      pointer-events: none;
     }
     .mdp-doc-btn {
       background: none; border: none; cursor: pointer;
-      color: var(--text-muted); padding: 4px 7px;
+      color: rgba(255,255,255,0.72); padding: 4px 7px;
       border-radius: 4px; font-size: 13px; font-weight: 500;
       display: inline-flex; align-items: center; gap: 4px;
       line-height: 1; height: 27px;
-      transition: background 0.12s, color 0.12s;
+      transition: background 0.1s, color 0.1s;
     }
-    .mdp-doc-btn:hover { background: var(--bg-grey-ec, #ececec); color: var(--text-default); }
-    .mdp-doc-btn.active { background: var(--bg-grey-ec, #ececec); color: var(--text-default); }
+    .mdp-doc-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .mdp-doc-btn.active { background: rgba(255,255,255,0.2); color: #fff; }
     .mdp-doc-toolbar-sep {
-      width: 1px; height: 15px; background: var(--border-content);
+      width: 1px; height: 14px; background: rgba(255,255,255,0.2);
       margin: 0 4px; flex-shrink: 0; align-self: center;
     }
     .mdp-doc-editor-wrap {
       flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; position: relative;
     }
+    .mdp-doc-scroll {
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-height: 0;
+    }
     .mdp-doc-editor {
-      flex: 1; overflow-y: auto; padding: 22px 40px 40px;
+      padding: 22px 40px 20px;
       font-size: 14px; color: var(--text-default); line-height: 1.7;
       outline: none; min-height: 200px;
     }
@@ -757,6 +777,54 @@
       transition: background 0.12s;
     }
     .mdp-doc-ai-cta-btn:hover { background: #1b9200; }
+    /* AI Suggested Actions section in Summary */
+    .mdp-ai-actions-section { padding: 0 40px 40px; flex-shrink: 0; }
+    .mdp-ai-actions-wrap { position: relative; }
+    .mdp-ai-actions-header {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; color: #22AD01;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .mdp-ai-actions-card {
+      background: rgba(34, 173, 1, 0.05);
+      border: 1px solid rgba(34, 173, 1, 0.2);
+      border-radius: 9px; overflow: hidden;
+    }
+    .mdp-ai-action-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(34, 173, 1, 0.1);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .mdp-ai-action-row:last-child { border-bottom: none; }
+    .mdp-ai-action-row:hover { background: rgba(34, 173, 1, 0.07); }
+    .mdp-ai-action-row.dismissed { opacity: 0.4; pointer-events: none; transition: opacity 0.25s; }
+    .mdp-ai-action-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: rgba(34, 173, 1, 0.12);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #22AD01;
+    }
+    .mdp-ai-action-text { flex: 1; min-width: 0; }
+    .mdp-ai-action-label { font-size: 13px; font-weight: 500; color: var(--text-default); }
+    .mdp-ai-action-desc { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+    .mdp-ai-action-arrow { color: var(--text-lighter); flex-shrink: 0; }
+    .mdp-ai-action-row-dismiss {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 14px; line-height: 1;
+      padding: 3px 5px; border-radius: 3px; opacity: 0.5;
+      flex-shrink: 0; transition: opacity 0.1s, background 0.1s;
+    }
+    .mdp-ai-action-row-dismiss:hover { opacity: 1; background: rgba(34,173,1,0.12); }
+    .mdp-ai-actions-section-dismiss {
+      position: absolute; top: -2px; right: 0;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 12px; line-height: 1;
+      padding: 3px 6px; border-radius: 4px; opacity: 0.6;
+      transition: opacity 0.1s, background 0.1s;
+    }
+    .mdp-ai-actions-section-dismiss:hover { opacity: 1; background: rgba(34,173,1,0.1); }
 
     /* ── Note chip ── */
     .mdp-note-chip-color { background-color: #F59E0B; }
@@ -2929,10 +2997,10 @@
               </div>
             </div>
 
-            <!-- Formatting toolbar -->
-            <div class="mdp-doc-toolbar">
+            <!-- Formatting toolbar — floating, shown only on text selection -->
+            <div class="mdp-doc-toolbar" id="mdp-doc-toolbar">
               <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('bold')" title="Bold"><strong>B</strong></button>
-              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('italic')" title="Italic"><em>I</em></button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('italic')" title="Italic"><em style="font-style:italic;">I</em></button>
               <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('underline')" title="Underline" style="text-decoration:underline">U</button>
               <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
               <div class="mdp-doc-toolbar-sep"></div>
@@ -2951,11 +3019,16 @@
 
             <!-- Document content area -->
             <div class="mdp-doc-editor-wrap" style="position:relative;">
-              <div class="mdp-doc-editor"
-                   id="mdp-doc-editor"
-                   contenteditable="true"
-                   data-placeholder="Start typing or use Templates to generate a summary…"
-                   oninput="onDocEdit()"></div>
+              <!-- Scrollable area: editor + AI actions -->
+              <div class="mdp-doc-scroll" id="mdp-doc-scroll">
+                <div class="mdp-doc-editor"
+                     id="mdp-doc-editor"
+                     contenteditable="true"
+                     data-placeholder="Start typing or use Templates to generate a summary…"
+                     oninput="onDocEdit()"></div>
+                <!-- AI Suggested Actions (populated by JS) -->
+                <div id="mdp-ai-actions-section" class="mdp-ai-actions-section" style="display:none;"></div>
+              </div>
               <!-- Empty state overlay (shown when summarySource = 'empty') -->
               <div id="mdp-doc-empty-overlay" style="display:none;position:absolute;inset:0;background:var(--bg-content);overflow-y:auto;">
                 <div class="mdp-doc-empty-state">
@@ -3890,6 +3963,11 @@
         'James: Book and brief freelance photographer — target shoot date Mar 1–2',
         'Lucas: Set up shared Figma workspace and invite client stakeholders'
       ],
+      aiActions: [
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Share revised creative brief with "Sun & Escape" direction — due Feb 21' },
+        { type: 'email', label: 'Draft email to Hotel Ops team', desc: 'Confirm rooftop pool photography availability for the campaign shoot' },
+        { type: 'task', label: 'Create task', desc: 'Book and brief freelance photographer — target shoot date Mar 1–2' },
+      ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:12', text: 'Thanks everyone for joining — excited to finally get into the creative. We\'ve put a lot of thinking into these three directions and I\'m curious where your gut takes you after seeing them.' },
         { speaker: 'Rachel Torres', time: '0:34', text: 'We were actually looking at the preview deck this morning as a team. There was a pretty clear favorite already.' },
@@ -3930,6 +4008,11 @@
         'Lucas: Share 3 case studies from organic/wellness brand clients',
         'Michael: Prepare contract draft for Growth package + brand refresh project'
       ],
+      aiActions: [
+        { type: 'contract', label: 'Create contract', desc: 'Draft contract for Growth package + brand refresh ($8.2K/mo + $12K standalone)' },
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Send revised one-pager with Growth package deliverables broken out by month' },
+        { type: 'meeting', label: 'Schedule follow-up meeting', desc: 'Check in on internal scope decision — target Feb 24' },
+      ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:10', text: 'Priya, Michael — thanks so much for the time today. Before we jump in, I want to frame how we put this proposal together. We spent time really mapping your goals to what we think will move the needle, rather than pitching everything we do.' },
         { speaker: 'Priya Sharma', time: '0:35', text: 'That\'s exactly what I was hoping to hear. We\'ve had proposals before that felt like a menu — we just want someone to tell us what we actually need.' },
@@ -3961,6 +4044,10 @@
         'Tom: Share 2026 marketing budget allocation by end of this week',
         'Alice: Confirm Q1 campaign theme with partnership team — deadline Feb 17',
         'Lucas: Begin keyword research for SEO content program'
+      ],
+      aiActions: [
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Share 2026 Annual Strategy Deck — due Feb 18' },
+        { type: 'proposal', label: 'Create proposal', desc: 'SEO content program — 40 high-intent terms, 6 articles/month, 12-month plan' },
       ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:15', text: 'Let\'s start with the numbers because I think they tell a really positive story, then we\'ll get into what\'s driving the improvements and how we carry that into 2026.' },
@@ -4024,6 +4111,10 @@
         'Priya: Introduce Lucas to the Redwood Valley farm supplier contact',
         'Lucas: Create TikTok A/B test plan — lo-fi vs. polished content — for March'
       ],
+      aiActions: [
+        { type: 'task', label: 'Create task', desc: 'Draft UGC series brief and production shot list for Redwood Valley farm shoot' },
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Send TikTok A/B test plan — lo-fi vs. polished content strategy for March' },
+      ],
       transcript: [
         { speaker: 'Priya Sharma', time: '0:06', text: 'Morning! Okay, I just pulled up the January dashboard — the Reels numbers look really good.' },
         { speaker: 'Lucas Didier', time: '0:18', text: 'Right? The "5 Ingredients" format we tested in week three was our best-performing post by a wide margin. The saves rate tells us people are actually using the recipe — that\'s the engagement signal we care about.' },
@@ -4058,6 +4149,10 @@
         'Alice: Share internal feedback from the partnership team by Feb 9',
         'Tom: Book brand rollout kickoff session for week of Feb 16'
       ],
+      aiActions: [
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Send updated logo files (wordmark 600 → 500) and revised brand voice examples' },
+        { type: 'meeting', label: 'Schedule follow-up meeting', desc: 'Brand rollout kickoff session — week of Feb 16' },
+      ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:20', text: 'I\'m going to take you through the full identity system today — logo, color, type, and voice. And at the end we\'ll look at how it all comes together in a few real application examples.' },
         { speaker: 'Tom Bradley', time: '0:38', text: 'Looking forward to it. The brief said "authoritative but not cold" and I\'m curious how you translated that.' },
@@ -4088,6 +4183,10 @@
         'Michael: Draft retainer agreement and send for review — due Feb 7',
         'Lucas: Send onboarding questionnaire and asset request list to Rachel',
         'Rachel: Confirm preferred contract start date (March 1 or March 15)'
+      ],
+      aiActions: [
+        { type: 'contract', label: 'Create contract', desc: 'Retainer agreement — $8,800/month, 3-month minimum, 30-day notice clause' },
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Send onboarding questionnaire and asset request list to Rachel' },
       ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:15', text: 'So following the campaign kickoff last week, we wanted to come back with a proposal for ongoing support. The idea is to capture momentum from Q2 and carry it through the year.' },
@@ -4145,6 +4244,11 @@
         'Alice: Grant HubSpot trial account setup access to Lucas',
         'Lucas: Schedule GA4 and GTM fix session with Tom for week of Feb 2'
       ],
+      aiActions: [
+        { type: 'proposal', label: 'Create proposal', desc: 'HubSpot CRM + Marketing Hub Starter — $4,800 setup fee, $890/mo, 6-week implementation' },
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Share full technical audit report — due Jan 29' },
+        { type: 'task', label: 'Create task', desc: 'Schedule GA4 and GTM fix session with Tom for week of Feb 2' },
+      ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:10', text: 'So I want to be upfront — what I found in the audit is more significant than I expected. There are some real gaps here that are costing you money right now.' },
         { speaker: 'Tom Bradley', time: '0:28', text: 'Well, better to know than not know. Give us the full picture.' },
@@ -4170,6 +4274,10 @@
         'Lucas: Send agency credentials deck and 2 real estate brand case studies — due Jan 17',
         'Lucas: Draft full proposal with two scope options by Jan 22',
         'Chris: Share current website login and Google Analytics access'
+      ],
+      aiActions: [
+        { type: 'proposal', label: 'Create proposal', desc: 'Full brand refresh + website redesign — two scope options, $40–55K budget range' },
+        { type: 'email', label: 'Write draft follow-up email', desc: 'Send agency credentials deck and 2 real estate brand case studies — due Jan 17' },
       ],
       transcript: [
         { speaker: 'Lucas Didier', time: '0:10', text: 'Chris, thanks so much for reaching out — Tom had nothing but good things to say. Tell me about Coastal. What does the business look like right now?' },
@@ -4249,6 +4357,9 @@
     docEditor.setAttribute('data-empty', docEditor.textContent.trim() ? 'false' : 'true');
     window._docSaveTimer = null;
     document.getElementById('mdp-doc-save-text').textContent = 'Saved · Just now';
+
+    // Render AI suggested actions
+    renderAiCallouts(d);
 
     // Transcript
     var txHtml = '';
@@ -4384,6 +4495,7 @@
       editor.innerHTML = buildAicDocContent(d);
       editor.setAttribute('data-empty', 'false');
       document.getElementById('mdp-doc-save-text').textContent = 'Saved · Just now';
+      renderAiCallouts(d);
     }, 1200);
   }
 
@@ -4439,6 +4551,113 @@
     if (dd && !e.target.closest('.mdp-template-wrap')) {
       dd.classList.remove('open');
     }
+  });
+
+  // ── AI Suggested Actions ──
+  var AI_ICONS = {
+    email: '<svg width="13" height="11" viewBox="0 0 14 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1.5" width="12" height="9" rx="1.5"/><path d="M1 4l6 4 6-4"/></svg>',
+    task:  '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="0.75" y="0.75" width="10.5" height="10.5" rx="2.25" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 6L5.5 8l3.5-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    contract: '<svg width="12" height="13" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1h8v12H2z"/><line x1="4" y1="4" x2="8" y2="4"/><line x1="4" y1="6.5" x2="8" y2="6.5"/><line x1="4" y1="9" x2="6" y2="9"/><path d="M7 10.5l1.5 1.5 2.5-2.5" stroke-width="1.2"/></svg>',
+    meeting: '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2.5" width="12" height="10" rx="1.5"/><line x1="1" y1="6" x2="13" y2="6"/><line x1="4.5" y1="1" x2="4.5" y2="4"/><line x1="9.5" y1="1" x2="9.5" y2="4"/></svg>',
+    proposal: '<svg width="12" height="13" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 1h8v12H2z"/><line x1="4" y1="4" x2="8" y2="4"/><line x1="4" y1="6.5" x2="8" y2="6.5"/><line x1="4" y1="9" x2="8" y2="9"/></svg>'
+  };
+
+  function renderAiCallouts(d) {
+    var section = document.getElementById('mdp-ai-actions-section');
+    if (!section) return;
+    if (!d.aiActions || !d.aiActions.length || d.summarySource === 'empty') {
+      section.style.display = 'none';
+      section.innerHTML = '';
+      return;
+    }
+    var idx = window._currentMeetingIdx;
+    var rowsHtml = d.aiActions.map(function(action, i) {
+      var icon = AI_ICONS[action.type] || AI_ICONS.task;
+      return '<div class="mdp-ai-action-row" id="mdp-ai-row-' + i + '">'
+        + '<div class="mdp-ai-action-icon">' + icon + '</div>'
+        + '<div class="mdp-ai-action-text">'
+        + '<div class="mdp-ai-action-label">' + action.label + '</div>'
+        + '<div class="mdp-ai-action-desc">' + action.desc + '</div>'
+        + '</div>'
+        + '<svg class="mdp-ai-action-arrow" width="5" height="9" viewBox="0 0 5 9" fill="none"><path d="M1 1l3 3.5-3 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '<button class="mdp-ai-action-row-dismiss" onclick="dismissAiRow(event,' + i + ')" title="Dismiss">✕</button>'
+        + '</div>';
+    }).join('');
+
+    section.innerHTML = '<div class="mdp-ai-actions-wrap">'
+      + '<div class="mdp-ai-actions-header">'
+      + '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6L12 2z"/></svg>'
+      + 'AI Suggested actions based on this meeting'
+      + '</div>'
+      + '<div class="mdp-ai-actions-card">' + rowsHtml + '</div>'
+      + '<button class="mdp-ai-actions-section-dismiss" onclick="dismissAllAiActions()" title="Dismiss all">Dismiss all</button>'
+      + '</div>';
+    section.style.display = 'block';
+  }
+
+  function dismissAiRow(e, rowIdx) {
+    e.stopPropagation();
+    var row = document.getElementById('mdp-ai-row-' + rowIdx);
+    if (!row) return;
+    row.classList.add('dismissed');
+    setTimeout(function() {
+      row.style.maxHeight = row.offsetHeight + 'px';
+      row.style.overflow = 'hidden';
+      row.style.transition = 'max-height 0.2s ease, padding 0.2s ease, opacity 0.2s ease';
+      requestAnimationFrame(function() {
+        row.style.maxHeight = '0';
+        row.style.padding = '0';
+        setTimeout(function() { row.remove(); checkAiSectionEmpty(); }, 220);
+      });
+    }, 150);
+  }
+
+  function checkAiSectionEmpty() {
+    var section = document.getElementById('mdp-ai-actions-section');
+    if (!section) return;
+    var remaining = section.querySelectorAll('.mdp-ai-action-row');
+    if (!remaining.length) section.style.display = 'none';
+  }
+
+  function dismissAllAiActions() {
+    var section = document.getElementById('mdp-ai-actions-section');
+    if (section) {
+      section.style.transition = 'opacity 0.2s ease';
+      section.style.opacity = '0';
+      setTimeout(function() { section.style.display = 'none'; section.style.opacity = ''; }, 220);
+    }
+  }
+
+  // ── Floating selection toolbar ──
+  document.addEventListener('selectionchange', function() {
+    var toolbar = document.getElementById('mdp-doc-toolbar');
+    if (!toolbar) return;
+    var sel = window.getSelection();
+    if (!sel || sel.isCollapsed || sel.rangeCount === 0) {
+      toolbar.classList.remove('visible');
+      return;
+    }
+    var editor = document.getElementById('mdp-doc-editor');
+    if (!editor) return;
+    var range = sel.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) {
+      toolbar.classList.remove('visible');
+      return;
+    }
+    var rect = range.getBoundingClientRect();
+    if (!rect || (rect.width === 0 && rect.height === 0)) {
+      toolbar.classList.remove('visible');
+      return;
+    }
+    toolbar.classList.add('visible');
+    var tw = toolbar.offsetWidth;
+    var th = toolbar.offsetHeight;
+    var left = rect.left + rect.width / 2 - tw / 2;
+    var top = rect.top - th - 10;
+    left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+    if (top < 8) top = rect.bottom + 8;
+    toolbar.style.left = left + 'px';
+    toolbar.style.top = top + 'px';
   });
 
   // ── End document editor helpers ──
