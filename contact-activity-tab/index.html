@@ -627,6 +627,137 @@
       font-size: 13px; color: var(--text-muted); line-height: 1.6;
     }
 
+    /* ── Summary document editor ── */
+    .mdp-doc-source-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 12px 40px 0; flex-shrink: 0;
+    }
+    .mdp-doc-source-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 500; line-height: 1.4;
+    }
+    .mdp-doc-source-badge--aic {
+      background: rgba(34,173,1,0.08); color: #16830b; border: 1px solid rgba(34,173,1,0.2);
+    }
+    .mdp-doc-source-badge--notes {
+      background: #EFF4FF; color: #2563EB; border: 1px solid rgba(37,99,235,0.18);
+    }
+    .mdp-template-wrap { position: relative; }
+    .mdp-template-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 5px;
+      background: none; border: 1px solid var(--border-content);
+      font-size: 12px; font-weight: 500; color: var(--text-default);
+      cursor: pointer; transition: background 0.12s;
+    }
+    .mdp-template-btn:hover { background: var(--bg-grey-f8); }
+    .mdp-template-dropdown {
+      position: absolute; top: calc(100% + 4px); right: 0;
+      background: var(--bg-content); border: 1px solid var(--border-content);
+      border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      z-index: 200; min-width: 200px; padding: 4px 0; display: none;
+    }
+    .mdp-template-dropdown.open { display: block; }
+    .mdp-template-item {
+      display: block; padding: 8px 14px;
+      font-size: 13px; color: var(--text-default); cursor: pointer; text-decoration: none;
+    }
+    .mdp-template-item:hover { background: var(--bg-grey-f8); color: var(--text-default); }
+    .mdp-template-section-label {
+      padding: 8px 14px 4px; font-size: 11px; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .mdp-template-divider { border: none; border-top: 1px solid var(--border-content); margin: 4px 0; }
+    .mdp-doc-toolbar {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 1px;
+      padding: 7px 40px; border-bottom: 1px solid var(--border-content);
+      flex-shrink: 0; background: var(--bg-grey-fa);
+      margin-top: 10px;
+    }
+    .mdp-doc-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); padding: 4px 7px;
+      border-radius: 4px; font-size: 13px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 4px;
+      line-height: 1; height: 27px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .mdp-doc-btn:hover { background: var(--bg-grey-ec, #ececec); color: var(--text-default); }
+    .mdp-doc-btn.active { background: var(--bg-grey-ec, #ececec); color: var(--text-default); }
+    .mdp-doc-toolbar-sep {
+      width: 1px; height: 15px; background: var(--border-content);
+      margin: 0 4px; flex-shrink: 0; align-self: center;
+    }
+    .mdp-doc-editor-wrap {
+      flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; position: relative;
+    }
+    .mdp-doc-editor {
+      flex: 1; overflow-y: auto; padding: 22px 40px 40px;
+      font-size: 14px; color: var(--text-default); line-height: 1.7;
+      outline: none; min-height: 200px;
+    }
+    .mdp-doc-editor:focus { outline: none; }
+    .mdp-doc-editor[data-empty="true"]::before {
+      content: attr(data-placeholder);
+      color: var(--text-lighter); pointer-events: none; display: block;
+    }
+    .mdp-doc-editor h2 {
+      font-size: 15px; font-weight: 600; margin: 18px 0 7px; color: var(--text-default);
+    }
+    .mdp-doc-editor h2:first-child { margin-top: 0; }
+    .mdp-doc-editor h3 {
+      font-size: 11px; font-weight: 600; margin: 12px 0 4px;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .mdp-doc-editor p { margin: 0 0 8px; }
+    .mdp-doc-editor ul, .mdp-doc-editor ol { margin: 0 0 10px; padding-left: 20px; }
+    .mdp-doc-editor li { margin-bottom: 4px; }
+    .mdp-doc-editor ul.todo-list { list-style: none; padding-left: 0; margin: 0 0 10px; }
+    .mdp-doc-editor ul.todo-list li {
+      display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; line-height: 1.5;
+    }
+    .mdp-doc-editor ul.todo-list li input[type="checkbox"] {
+      margin-top: 3px; flex-shrink: 0;
+      accent-color: #22AD01; width: 13px; height: 13px; cursor: pointer;
+    }
+    .mdp-doc-editor ul.todo-list li.todo-checked > span {
+      color: var(--text-muted); text-decoration: line-through;
+    }
+    .mdp-doc-save-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 40px; border-top: 1px solid var(--border-content);
+      flex-shrink: 0; font-size: 12px; color: var(--text-muted);
+    }
+    .mdp-doc-save-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #22AD01; flex-shrink: 0;
+    }
+    /* Empty state for doc */
+    .mdp-doc-empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 50px 40px; text-align: center;
+    }
+    .mdp-doc-empty-icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      background: var(--bg-grey-f5); display: flex; align-items: center;
+      justify-content: center; margin-bottom: 14px; color: var(--text-muted);
+    }
+    .mdp-doc-empty-title {
+      font-size: 14px; font-weight: 600; color: var(--text-default); margin-bottom: 6px;
+    }
+    .mdp-doc-empty-desc {
+      font-size: 13px; color: var(--text-muted); line-height: 1.55;
+      margin-bottom: 20px; max-width: 260px;
+    }
+    .mdp-doc-ai-cta-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 6px;
+      background: #22AD01; color: white; border: none;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .mdp-doc-ai-cta-btn:hover { background: #1b9200; }
+
     /* ── Note chip ── */
     .mdp-note-chip-color { background-color: #F59E0B; }
 
@@ -1958,9 +2089,9 @@
         <!-- Tabs — outside wrapper-full-width so the bottom border spans full width -->
         <div class="subnavigation mt20">
           <div class="subnavigation-items pl40">
-            <a class="subnavigation-item active" id="tab-btn-activity" onclick="switchTab('activity')">Activity</a>
+            <a class="subnavigation-item" id="tab-btn-activity" onclick="switchTab('activity')">Activity</a>
             <a class="subnavigation-item" id="tab-btn-notes" onclick="switchTab('notes')">Notes</a>
-            <a class="subnavigation-item" id="tab-btn-meetings" onclick="switchTab('meetings')">Meetings</a>
+            <a class="subnavigation-item active" id="tab-btn-meetings" onclick="switchTab('meetings')">Meetings</a>
             <a class="subnavigation-item" id="tab-btn-emails" onclick="switchTab('emails')">Emails</a>
           </div>
         </div>
@@ -1973,7 +2104,7 @@
         <div class="contact-main-content">
 
           <!-- ── ACTIVITY TAB ── -->
-          <div id="tab-activity" class="tab-panel active">
+          <div id="tab-activity" class="tab-panel">
             <div class="tab-section-title-row">
               <span class="tab-section-title">Activity</span>
               <div class="add-btn-wrap">
@@ -2217,7 +2348,7 @@
           </div>
 
           <!-- ── MEETINGS TAB ── -->
-          <div id="tab-meetings" class="tab-panel" style="padding:0;overflow:hidden;">
+          <div id="tab-meetings" class="tab-panel active" style="padding:0;overflow:hidden;">
 
             <!-- Title -->
             <div class="tab-section-title-row">
@@ -2770,94 +2901,89 @@
             <div class="mdp-subnavigation-items">
               <a class="mdp-subnav-item active" id="mdp-tab-summary-btn" onclick="switchMdpTab('summary', this)">Summary</a>
               <a class="mdp-subnav-item" id="mdp-tab-transcript-btn" onclick="switchMdpTab('transcript', this)">Transcript</a>
-              <a class="mdp-subnav-item" id="mdp-tab-notes-btn" onclick="switchMdpTab('notes', this)">Note</a>
               <a class="mdp-subnav-item" id="mdp-tab-comments-btn" onclick="switchMdpTab('comments', this)"><span id="mdp-comments-tab-label">Comments</span></a>
             </div>
           </div>
 
-          <!-- Summary tab -->
-          <div class="mdp-tab-panel" id="mdp-tab-summary">
-            <div class="mdp-summary-section">
-              <h3 class="mdp-summary-section-title">Quick Recap</h3>
-              <p class="mdp-recap-text" id="mdp-recap"></p>
+          <!-- Summary tab — editable document -->
+          <div class="mdp-tab-panel" id="mdp-tab-summary" style="display:flex;flex-direction:column;overflow:hidden;">
+
+            <!-- Source badge + Template picker -->
+            <div class="mdp-doc-source-bar" id="mdp-doc-source-bar">
+              <div id="mdp-doc-source-badge-wrap"></div>
+              <div class="mdp-template-wrap">
+                <button class="mdp-template-btn" onclick="toggleTemplateMenu(event)">
+                  Templates
+                  <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="mdp-template-dropdown" id="mdp-template-dropdown">
+                  <div class="mdp-template-section-label">Regenerate with AI</div>
+                  <a class="mdp-template-item" onclick="applyTemplate('discovery')">Discovery Call</a>
+                  <a class="mdp-template-item" onclick="applyTemplate('sales')">Sales Follow-Up</a>
+                  <a class="mdp-template-item" onclick="applyTemplate('kickoff')">Project Kickoff</a>
+                  <a class="mdp-template-item" onclick="applyTemplate('hr')">HR Introduction</a>
+                  <a class="mdp-template-item" onclick="applyTemplate('executive')">Executive Briefing</a>
+                  <div class="mdp-template-divider"></div>
+                  <a class="mdp-template-item" onclick="applyTemplate('blank')">Clear & Start Over</a>
+                </div>
+              </div>
             </div>
-            <div class="mdp-summary-section" id="mdp-chapters-section">
-              <h3 class="mdp-summary-section-title">Chapters</h3>
-              <div class="mdp-chapters-list" id="mdp-chapters"></div>
+
+            <!-- Formatting toolbar -->
+            <div class="mdp-doc-toolbar">
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('bold')" title="Bold"><strong>B</strong></button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('italic')" title="Italic"><em>I</em></button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('underline')" title="Underline" style="text-decoration:underline">U</button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+              <div class="mdp-doc-toolbar-sep"></div>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('formatBlock', 'H2')" title="Heading">H2</button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('formatBlock', 'H3')" title="Small heading">H3</button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('formatBlock', 'P')" title="Body">¶</button>
+              <div class="mdp-doc-toolbar-sep"></div>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); insertDocTodo()" title="To-do item">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="0.75" y="0.75" width="10.5" height="10.5" rx="2.25" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 6L5.5 8l3.5-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                To-do
+              </button>
+              <button class="mdp-doc-btn" onmousedown="event.preventDefault(); formatDocCmd('insertUnorderedList')" title="Bullet list">
+                <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><circle cx="1.5" cy="2" r="1.2" fill="currentColor"/><circle cx="1.5" cy="8" r="1.2" fill="currentColor"/><line x1="4" y1="2" x2="11.5" y2="2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="4" y1="8" x2="11.5" y2="8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
             </div>
-            <div class="mdp-summary-section" id="mdp-nextsteps-section">
-              <h3 class="mdp-summary-section-title">Next Steps</h3>
-              <div class="mdp-next-steps-list" id="mdp-nextsteps"></div>
+
+            <!-- Document content area -->
+            <div class="mdp-doc-editor-wrap" style="position:relative;">
+              <div class="mdp-doc-editor"
+                   id="mdp-doc-editor"
+                   contenteditable="true"
+                   data-placeholder="Start typing or use Templates to generate a summary…"
+                   oninput="onDocEdit()"></div>
+              <!-- Empty state overlay (shown when summarySource = 'empty') -->
+              <div id="mdp-doc-empty-overlay" style="display:none;position:absolute;inset:0;background:var(--bg-content);overflow-y:auto;">
+                <div class="mdp-doc-empty-state">
+                  <div class="mdp-doc-empty-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  </div>
+                  <div class="mdp-doc-empty-title">No summary yet</div>
+                  <div class="mdp-doc-empty-desc">There's no AI summary or notes for this meeting. Start writing or generate a summary from the transcript.</div>
+                  <button class="mdp-doc-ai-cta-btn" onclick="generateAiSummary()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6L12 2z" fill="currentColor"/></svg>
+                    Generate with AI
+                  </button>
+                  <p style="margin-top:14px;font-size:12px;color:var(--text-muted);">or <a href="#" onclick="startBlankDoc(); return false;" style="color:var(--color-primary);">start with a blank document</a></p>
+                </div>
+              </div>
             </div>
+
+            <!-- Save indicator -->
+            <div class="mdp-doc-save-bar">
+              <div class="mdp-doc-save-dot"></div>
+              <span id="mdp-doc-save-text">Saved · Just now</span>
+            </div>
+
           </div>
 
           <!-- Transcript tab -->
           <div class="mdp-tab-panel" id="mdp-tab-transcript" hidden>
             <div id="mdp-transcript"></div>
-          </div>
-
-          <!-- Notes tab -->
-          <div class="mdp-tab-panel" id="mdp-tab-notes" hidden>
-            <!-- Zoom sync bar (hidden for non-Zoom notes) -->
-            <div class="mdp-notes-sync-bar" id="mdp-notes-sync-bar" style="display:none;">
-              <div class="mdp-notes-sync-info">
-                <a class="mdp-notes-zoom-badge" href="#" onclick="return false;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#0B5CFF"/><path d="M14.5 7H9.5C8.12 7 7 8.12 7 9.5v5c0 1.38 1.12 2.5 2.5 2.5h5c1.38 0 2.5-1.12 2.5-2.5v-5C17 8.12 15.88 7 14.5 7zm5.27 1.68-2.77 1.96v2.72l2.77 1.96c.46.33 1.23.01 1.23-.55V9.23c0-.56-.77-.88-1.23-.55z" fill="white"/></svg>
-                  Synced from Zoom
-                </a>
-                <span class="mdp-notes-sync-dot" id="mdp-notes-sync-dot"></span>
-                <span class="mdp-notes-sync-time" id="mdp-notes-sync-time"></span>
-              </div>
-              <button class="mdp-notes-sync-btn" id="mdp-notes-sync-btn" onclick="syncNotes()">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                Sync Notes
-              </button>
-            </div>
-            <!-- Custom rich-text editor -->
-            <div class="mdp-rte-wrap">
-              <div class="mdp-rte-toolbar" id="mdp-rte-toolbar">
-                <select class="mdp-rte-select" onchange="rteFormat(this.value); this.value=''" title="Format">
-                  <option value="">Normal</option>
-                  <option value="h1">Heading 1</option>
-                  <option value="h2">Heading 2</option>
-                  <option value="h3">Heading 3</option>
-                  <option value="h4">Heading 4</option>
-                  <option value="blockquote">Quote</option>
-                </select>
-                <div class="mdp-rte-sep"></div>
-                <button class="mdp-rte-btn" title="Bold" onclick="rteExec('bold')" data-cmd="bold"><b>B</b></button>
-                <button class="mdp-rte-btn" title="Italic" onclick="rteExec('italic')" data-cmd="italic"><i>i</i></button>
-                <button class="mdp-rte-btn" title="Underline" onclick="rteExec('underline')" data-cmd="underline"><u>U</u></button>
-                <button class="mdp-rte-btn" title="Strikethrough" onclick="rteExec('strikeThrough')" data-cmd="strikeThrough" style="text-decoration:line-through;">S</button>
-                <div class="mdp-rte-sep"></div>
-                <button class="mdp-rte-btn" title="Ordered list" onclick="rteExec('insertOrderedList')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4M4 10h2M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
-                </button>
-                <button class="mdp-rte-btn" title="Bullet list" onclick="rteExec('insertUnorderedList')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/></svg>
-                </button>
-                <div class="mdp-rte-sep"></div>
-                <button class="mdp-rte-btn" title="Insert link" onclick="rteInsertLink()">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                </button>
-                <button class="mdp-rte-btn" title="Indent" onclick="rteExec('indent')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/><line x1="9" y1="12" x2="21" y2="12"/><polyline points="3 9 6 12 3 15"/></svg>
-                </button>
-                <button class="mdp-rte-btn" title="Outdent" onclick="rteExec('outdent')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/><line x1="9" y1="12" x2="21" y2="12"/><polyline points="7 9 4 12 7 15"/></svg>
-                </button>
-                <div class="mdp-rte-sep"></div>
-                <button class="mdp-rte-btn" title="Undo" onclick="rteExec('undo')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5.41"/></svg>
-                </button>
-                <button class="mdp-rte-btn" title="Redo" onclick="rteExec('redo')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.41"/></svg>
-                </button>
-              </div>
-              <div class="mdp-rte-body" id="mdp-rte-body" contenteditable="true" spellcheck="true"
-                onkeyup="rteUpdateToolbar()" onmouseup="rteUpdateToolbar()" onfocus="rteUpdateToolbar()">
-              </div>
-            </div>
           </div>
 
           <!-- Comments tab -->
@@ -3744,6 +3870,7 @@
   var meetingData = [
     {
       title: 'Q2 Campaign Kickoff — Northside Hotel',
+      summarySource: 'aic',
       date: 'Thu, Feb 19  3:00 PM', duration: '1h 15m', hasRecording: true,
       owner: { name: 'Lucas Didier', img: GRAY_AVATAR + 'LD' },
       invitees: [
@@ -3783,6 +3910,8 @@
     },
     {
       title: 'Full-Service Proposal Presentation — Bloom Organics',
+      summarySource: 'notes',
+      summaryDoc: '<h2>Proposal Presentation — Bloom Organics</h2><h3>Key Outcomes</h3><p>Bloom liked the <strong>Growth package</strong> ($8.2K/mo). Brand refresh workstream resonated strongly — Priya flagged that current identity feels "dated and inconsistent." Moving forward pending internal sign-off.</p><h3>Package Scope Discussed</h3><ul><li>3 tiers presented: Essentials, Growth, Scale</li><li>Bloom mapped to Growth — brand consistency + TikTok + SEO-driven content</li><li>Brand refresh as standalone project ($12K) — strong interest from Priya</li><li>Paid social: no current presence, big growth opportunity</li></ul><h3>Objections / Open Questions</h3><ul><li>Priya wants deliverables broken out by month (send one-pager)</li><li>Michael asked about brand refresh timeline → 6 weeks, 2 review sessions</li><li>Need 3 CPG brand case studies to build confidence</li></ul><h3>Next Steps</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"> <span>Priya to confirm scope selection by Feb 24</span></li><li><input type="checkbox" onclick="toggleTodo(this)"> <span>Lucas: send revised one-pager with Growth deliverables month-by-month</span></li><li><input type="checkbox" onclick="toggleTodo(this)"> <span>Lucas: share 3 organic/wellness brand case studies</span></li><li><input type="checkbox" onclick="toggleTodo(this)"> <span>Michael: draft contract for Growth package + brand refresh</span></li></ul>',
       date: 'Tue, Feb 17  2:00 PM', duration: '47m', hasRecording: true,
       owner: { name: 'Lucas Didier', img: GRAY_AVATAR + 'LD' },
       invitees: [
@@ -3811,6 +3940,7 @@
     },
     {
       title: 'Q4 Campaign Review & 2026 Planning — Vertex Legal',
+      summarySource: 'aic',
       date: 'Sat, Feb 14  10:00 AM', duration: '1h 30m', hasRecording: true,
       owner: { name: 'Lucas Didier', img: GRAY_AVATAR + 'LD' },
       invitees: [
@@ -3849,6 +3979,7 @@
     },
     {
       title: 'Intro Call – Coastal Realty Group',
+      summarySource: 'empty',
       date: 'Thu, Feb 12  4:30 PM', duration: '30m', hasRecording: true,
       owner: { name: 'Lucas Didier', img: GRAY_AVATAR + 'LD' },
       invitees: [
@@ -3874,6 +4005,7 @@
     },
     {
       title: 'Monthly Performance Check-in — Bloom Organics',
+      summarySource: 'notes',
       date: 'Tue, Feb 10  11:00 AM', duration: '45m', hasRecording: false,
       owner: { name: 'Lucas Didier', img: GRAY_AVATAR + 'LD' },
       invitees: [
@@ -4088,40 +4220,35 @@
     }).join('');
     document.getElementById('mdp-invitees-stack').innerHTML = invHtml;
 
-    // Quick Recap
-    document.getElementById('mdp-recap').textContent = d.recap || '';
+    // ── Summary document editor ──
+    var docEditor = document.getElementById('mdp-doc-editor');
+    var sourceBadgeWrap = document.getElementById('mdp-doc-source-badge-wrap');
+    var src = d.summarySource || (d.noteContent ? 'notes' : 'aic');
 
-    // Chapters
-    var chapHtml = '';
-    if (d.chapters && d.chapters.length) {
-      d.chapters.forEach(function(ch, i) {
-        var hasContent = !!ch.content;
-        chapHtml += '<div class="mdp-chapter">'
-          + '<div class="mdp-chapter-header" onclick="toggleMdpChapter(this)">'
-          + '<svg class="mdp-chapter-chevron' + (i === 0 && hasContent ? ' open' : '') + '" width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.654 11.498L7.12 4.889C6.957 4.726 6.96 4.456 7.128 4.29L8.297 3.128C8.465 2.961 8.738 2.957 8.903 3.12L16.882 11.194C16.968 11.278 17.007 11.392 16.999 11.502C17.003 11.616 16.964 11.726 16.882 11.81L8.903 19.88C8.738 20.043 8.465 20.039 8.297 19.872L7.128 18.711C6.96 18.544 6.957 18.274 7.12 18.111L13.654 11.498Z" fill="currentColor"/></svg>'
-          + '<span class="mdp-chapter-title">' + ch.title + '</span>'
-          + '</div>';
-        if (hasContent) {
-          chapHtml += '<div class="mdp-chapter-content' + (i === 0 ? ' open' : '') + '">' + ch.content + '</div>';
-        }
-        chapHtml += '</div>';
-      });
-    }
-    document.getElementById('mdp-chapters').innerHTML = chapHtml;
-    document.getElementById('mdp-chapters-section').style.display = (d.chapters && d.chapters.length) ? '' : 'none';
+    var emptyOverlay = document.getElementById('mdp-doc-empty-overlay');
 
-    // Next Steps
-    var stepsHtml = '';
-    if (d.nextSteps && d.nextSteps.length) {
-      d.nextSteps.forEach(function(step) {
-        stepsHtml += '<div class="mdp-next-step">'
-          + '<span class="mdp-next-step-arrow">→</span>'
-          + '<span>' + step + '</span>'
-          + '</div>';
-      });
+    if (src === 'notes') {
+      sourceBadgeWrap.innerHTML = '<span class="mdp-doc-source-badge mdp-doc-source-badge--notes">'
+        + '<svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10V12h2l6-6-2-2-6 6z"/><path d="M11 3l-2-2" stroke-linecap="round"/></svg>'
+        + 'From My Notes</span>';
+      docEditor.innerHTML = d.summaryDoc || d.noteContent || '';
+      emptyOverlay.style.display = 'none';
+    } else if (src === 'empty') {
+      sourceBadgeWrap.innerHTML = '';
+      docEditor.innerHTML = '';
+      emptyOverlay.style.display = 'block';
+    } else {
+      // AIC source (default)
+      sourceBadgeWrap.innerHTML = '<span class="mdp-doc-source-badge mdp-doc-source-badge--aic">'
+        + '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6L12 2z"/></svg>'
+        + 'AI Companion</span>';
+      docEditor.innerHTML = d.summaryDoc || buildAicDocContent(d);
+      emptyOverlay.style.display = 'none';
     }
-    document.getElementById('mdp-nextsteps').innerHTML = stepsHtml;
-    document.getElementById('mdp-nextsteps-section').style.display = (d.nextSteps && d.nextSteps.length) ? '' : 'none';
+
+    docEditor.setAttribute('data-empty', docEditor.textContent.trim() ? 'false' : 'true');
+    window._docSaveTimer = null;
+    document.getElementById('mdp-doc-save-text').textContent = 'Saved · Just now';
 
     // Transcript
     var txHtml = '';
@@ -4140,16 +4267,19 @@
     }
     document.getElementById('mdp-transcript').innerHTML = txHtml;
 
-    // Notes tab — always visible, populate editor
+    // Notes tab — populate editor if present
     var syncBar = document.getElementById('mdp-notes-sync-bar');
     var rteBody = document.getElementById('mdp-rte-body');
-    if (d.noteFromZoom && d.noteLastSync) {
-      syncBar.style.display = 'flex';
-      document.getElementById('mdp-notes-sync-time').textContent = 'Last synced: ' + d.noteLastSync;
-    } else {
-      syncBar.style.display = 'none';
+    if (syncBar) {
+      if (d.noteFromZoom && d.noteLastSync) {
+        syncBar.style.display = 'flex';
+        var syncTimeEl = document.getElementById('mdp-notes-sync-time');
+        if (syncTimeEl) syncTimeEl.textContent = 'Last synced: ' + d.noteLastSync;
+      } else {
+        syncBar.style.display = 'none';
+      }
     }
-    rteBody.innerHTML = d.noteContent || '';
+    if (rteBody) rteBody.innerHTML = d.noteContent || '';
 
     // Comments
     var comments = d.comments || [];
@@ -4177,18 +4307,141 @@
       ? ' <span class="mdp-tab-count">' + commentCount + '</span>'
       : ' <span class="mdp-tab-count mdp-tab-count--zero">0</span>');
 
-    // Default to Note tab when note content exists, otherwise Summary
-    if (d.noteContent) {
-      switchMdpTab('notes', document.getElementById('mdp-tab-notes-btn'));
-    } else {
-      switchMdpTab('summary', document.getElementById('mdp-tab-summary-btn'));
-    }
+    // Always default to Summary tab (now an editable document)
+    switchMdpTab('summary', document.getElementById('mdp-tab-summary-btn'));
 
     // Close dots menu
     document.getElementById('mdp-top-dropdown').classList.remove('open');
 
     document.getElementById('meeting-detail-panel').classList.add('open');
   }
+
+  // ── Document editor helpers ──
+
+  function buildAicDocContent(d) {
+    var html = '';
+    if (d.recap) {
+      html += '<h2>Quick Recap</h2><p>' + d.recap + '</p>';
+    }
+    if (d.chapters && d.chapters.length) {
+      var hasContent = d.chapters.some(function(ch) { return !!ch.content; });
+      if (hasContent) {
+        html += '<h2>Key Discussion Points</h2>';
+        d.chapters.forEach(function(ch) {
+          if (ch.content) {
+            html += '<h3>' + ch.title + '</h3><p>' + ch.content + '</p>';
+          }
+        });
+      }
+    }
+    if (d.nextSteps && d.nextSteps.length) {
+      html += '<h2>Next Steps</h2><ul class="todo-list">';
+      d.nextSteps.forEach(function(step) {
+        html += '<li><input type="checkbox" onclick="toggleTodo(this)"><span>' + step + '</span></li>';
+      });
+      html += '</ul>';
+    }
+    return html;
+  }
+
+  function formatDocCmd(cmd, val) {
+    var editor = document.getElementById('mdp-doc-editor');
+    editor.focus();
+    document.execCommand(cmd, false, val || null);
+    onDocEdit();
+  }
+
+  function insertDocTodo() {
+    var editor = document.getElementById('mdp-doc-editor');
+    editor.focus();
+    // Insert a simple todo list item
+    var li = '<ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>To-do item</span></li></ul>';
+    document.execCommand('insertHTML', false, li);
+    onDocEdit();
+  }
+
+  function toggleTodo(checkbox) {
+    var li = checkbox.closest('li');
+    if (li) {
+      li.classList.toggle('todo-checked', checkbox.checked);
+    }
+  }
+
+  function generateAiSummary() {
+    var editor = document.getElementById('mdp-doc-editor');
+    var sourceBadgeWrap = document.getElementById('mdp-doc-source-badge-wrap');
+    var emptyOverlay = document.getElementById('mdp-doc-empty-overlay');
+    var idx = window._currentMeetingIdx;
+    if (idx === undefined) return;
+    var d = meetingData[idx];
+    // Show generating state briefly
+    emptyOverlay.style.display = 'none';
+    editor.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">Generating summary with AI…</p>';
+    setTimeout(function() {
+      sourceBadgeWrap.innerHTML = '<span class="mdp-doc-source-badge mdp-doc-source-badge--aic">'
+        + '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17 5.8 21.3l2.4-7.4L2 9.4h7.6L12 2z"/></svg>'
+        + 'AI Companion</span>';
+      editor.innerHTML = buildAicDocContent(d);
+      editor.setAttribute('data-empty', 'false');
+      document.getElementById('mdp-doc-save-text').textContent = 'Saved · Just now';
+    }, 1200);
+  }
+
+  function startBlankDoc() {
+    var editor = document.getElementById('mdp-doc-editor');
+    var emptyOverlay = document.getElementById('mdp-doc-empty-overlay');
+    emptyOverlay.style.display = 'none';
+    editor.innerHTML = '';
+    editor.setAttribute('data-empty', 'true');
+    editor.focus();
+  }
+
+  function applyTemplate(tplName) {
+    var dropdown = document.getElementById('mdp-template-dropdown');
+    dropdown.classList.remove('open');
+    var editor = document.getElementById('mdp-doc-editor');
+    var emptyOverlay = document.getElementById('mdp-doc-empty-overlay');
+    if (emptyOverlay) emptyOverlay.style.display = 'none';
+    var idx = window._currentMeetingIdx;
+    var d = idx !== undefined ? meetingData[idx] : {};
+    var templates = {
+      discovery: '<h2>Discovery Call Summary</h2><h3>Client Background</h3><p>' + (d.recap || 'Add client background and context here.') + '</p><h3>Pain Points</h3><ul><li>Add pain point</li><li>Add pain point</li></ul><h3>Goals & Success Metrics</h3><ul><li>Add goal</li></ul><h3>Next Steps</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>Send follow-up proposal</span></li><li><input type="checkbox" onclick="toggleTodo(this)"><span>Schedule next call</span></li></ul>',
+      sales: '<h2>Sales Follow-Up</h2><h3>Meeting Summary</h3><p>' + (d.recap || 'Summarize the sales conversation here.') + '</p><h3>Client Interest Level</h3><p>Add notes on engagement and objections.</p><h3>Proposed Solution</h3><p>Add the proposed scope and pricing discussed.</p><h3>Next Steps</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>Send proposal within 2 business days</span></li><li><input type="checkbox" onclick="toggleTodo(this)"><span>Follow up if no reply by next week</span></li></ul>',
+      kickoff: '<h2>Project Kickoff Summary</h2><h3>Project Overview</h3><p>' + (d.recap || 'Describe the project scope and goals.') + '</p><h3>Roles & Responsibilities</h3><ul><li>Project lead: </li><li>Client contact: </li><li>Key stakeholders: </li></ul><h3>Timeline & Milestones</h3><ul><li>Milestone 1: </li><li>Milestone 2: </li></ul><h3>Action Items</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>Share project brief</span></li><li><input type="checkbox" onclick="toggleTodo(this)"><span>Set up shared workspace</span></li></ul>',
+      hr: '<h2>HR Introduction Notes</h2><h3>Candidate / New Hire</h3><p>Add name, role, and start date.</p><h3>Key Takeaways</h3><p>' + (d.recap || 'Add summary of the introduction meeting.') + '</p><h3>Onboarding Checklist</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>Send welcome kit</span></li><li><input type="checkbox" onclick="toggleTodo(this)"><span>Set up system access</span></li><li><input type="checkbox" onclick="toggleTodo(this)"><span>Schedule 30-day check-in</span></li></ul>',
+      executive: '<h2>Executive Briefing</h2><h3>Objective</h3><p>' + (d.recap || 'State the objective of the meeting.') + '</p><h3>Key Decisions Made</h3><ul><li>Add decision</li></ul><h3>Risks & Dependencies</h3><ul><li>Add risk</li></ul><h3>Action Items</h3><ul class="todo-list"><li><input type="checkbox" onclick="toggleTodo(this)"><span>Add action item</span></li></ul>',
+      blank: ''
+    };
+    var content = templates[tplName] !== undefined ? templates[tplName] : '';
+    editor.innerHTML = content;
+    editor.setAttribute('data-empty', content ? 'false' : 'true');
+    onDocEdit();
+  }
+
+  var _docSaveTimer = null;
+  function onDocEdit() {
+    var editor = document.getElementById('mdp-doc-editor');
+    editor.setAttribute('data-empty', editor.textContent.trim() ? 'false' : 'true');
+    document.getElementById('mdp-doc-save-text').textContent = 'Saving…';
+    if (_docSaveTimer) clearTimeout(_docSaveTimer);
+    _docSaveTimer = setTimeout(function() {
+      document.getElementById('mdp-doc-save-text').textContent = 'Saved · Just now';
+    }, 800);
+  }
+
+  function toggleTemplateMenu(e) {
+    e.stopPropagation();
+    document.getElementById('mdp-template-dropdown').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    var dd = document.getElementById('mdp-template-dropdown');
+    if (dd && !e.target.closest('.mdp-template-wrap')) {
+      dd.classList.remove('open');
+    }
+  });
+
+  // ── End document editor helpers ──
 
   function closeMeetingPanel() {
     _recPause();
@@ -4433,14 +4686,24 @@
   function switchMdpTab(tab, el) {
     document.querySelectorAll('.mdp-subnav-item').forEach(function(t) { t.classList.remove('active'); });
     if (el) el.classList.add('active');
-    var panels = ['mdp-tab-summary', 'mdp-tab-transcript', 'mdp-tab-notes', 'mdp-tab-comments'];
+    var panels = ['mdp-tab-summary', 'mdp-tab-transcript', 'mdp-tab-comments'];
     panels.forEach(function(id) {
       var p = document.getElementById(id);
-      if (p) p.hidden = true;
+      if (!p) return;
+      if (id === 'mdp-tab-summary') {
+        p.style.display = 'none';
+      } else {
+        p.hidden = true;
+      }
     });
     var active = document.getElementById('mdp-tab-' + tab);
-    if (active) active.hidden = false;
-
+    if (active) {
+      if (tab === 'summary') {
+        active.style.display = 'flex';
+      } else {
+        active.hidden = false;
+      }
+    }
   }
 
   function toggleMdpChapter(headerEl) {
