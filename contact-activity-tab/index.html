@@ -984,26 +984,35 @@
     /* ── Task Creation Modal ── */
     .task-modal-dialog { width: 500px; border-radius: 10px; overflow: hidden; }
     .task-modal-header {
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      display: flex; align-items: center; justify-content: center;
       padding: 22px 24px 18px;
       border-bottom: 1px solid var(--border-content);
     }
     .task-modal-title { font-size: 16px; font-weight: 600; color: var(--text-default); }
-    .task-modal-tab-switch {
-      display: flex; background: var(--bg-grey-f3, #f3f3f3); border-radius: 7px; padding: 3px; gap: 2px;
-    }
-    .task-modal-tab-btn {
-      font-size: 13px; font-weight: 500; color: var(--text-muted);
-      background: none; border: none; border-radius: 5px;
-      padding: 5px 14px; cursor: pointer; transition: background 0.12s, color 0.12s;
-      font-family: inherit;
-    }
-    .task-modal-tab-btn:hover { color: var(--text-default); }
-    .task-modal-tab-btn.active {
-      background: var(--bg-content, #fff); color: var(--text-default);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
     .task-modal-body { padding: 20px 24px; }
+    .task-advanced-toggle {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; user-select: none; margin-bottom: 0;
+      background: none; border: none; padding: 0; font-family: inherit;
+    }
+    .task-advanced-toggle:hover { color: var(--text-default); }
+    .task-advanced-toggle-chevron {
+      display: inline-block; transition: transform 0.18s ease;
+    }
+    .task-advanced-toggle-chevron--open { transform: rotate(180deg); }
+    .task-advanced-fields {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+      margin-top: 0;
+    }
+    .task-advanced-fields--open {
+      max-height: 600px;
+      opacity: 1;
+      margin-top: 16px;
+    }
     .task-field-group { margin-bottom: 16px; }
     .task-name-input {
       width: 100%; box-sizing: border-box;
@@ -4725,7 +4734,10 @@
       assigneeAvatar.style.display = 'none';
     }
     document.getElementById('task-modal-overlay').classList.remove('hidden');
-    switchTaskTab('details');
+    // Reset advanced fields to collapsed
+    document.getElementById('task-advanced-fields').classList.remove('task-advanced-fields--open');
+    document.getElementById('task-advanced-chevron').classList.remove('task-advanced-toggle-chevron--open');
+    document.getElementById('task-advanced-label').textContent = 'Show Advanced Fields';
     setTimeout(function() {
       var t = document.getElementById('task-name-input');
       t.focus(); t.select();
@@ -4757,11 +4769,13 @@
     _createTaskStepIdx = null;
   }
 
-  function switchTaskTab(tab) {
-    document.getElementById('task-tab-details').style.display = tab === 'details' ? '' : 'none';
-    document.getElementById('task-tab-advanced').style.display = tab === 'advanced' ? '' : 'none';
-    document.getElementById('task-tab-btn-details').classList.toggle('active', tab === 'details');
-    document.getElementById('task-tab-btn-advanced').classList.toggle('active', tab === 'advanced');
+  function toggleAdvancedFields() {
+    var fields = document.getElementById('task-advanced-fields');
+    var chevron = document.getElementById('task-advanced-chevron');
+    var label = document.getElementById('task-advanced-label');
+    var isOpen = fields.classList.toggle('task-advanced-fields--open');
+    chevron.classList.toggle('task-advanced-toggle-chevron--open', isOpen);
+    label.textContent = isOpen ? 'Hide Advanced Fields' : 'Show Advanced Fields';
   }
 
   function submitTask() {
@@ -5423,13 +5437,9 @@
       <!-- Header -->
       <div class="task-modal-header">
         <span class="task-modal-title">New Task</span>
-        <div class="task-modal-tab-switch">
-          <button class="task-modal-tab-btn active" id="task-tab-btn-details" onclick="switchTaskTab('details')">Details</button>
-          <button class="task-modal-tab-btn" id="task-tab-btn-advanced" onclick="switchTaskTab('advanced')">Advanced</button>
-        </div>
       </div>
 
-      <!-- DETAILS TAB -->
+      <!-- BODY -->
       <div class="task-modal-body" id="task-tab-details">
         <div class="task-field-group">
           <input type="text" class="task-name-input" id="task-name-input" placeholder="Task name" autocomplete="off" />
@@ -5477,80 +5487,86 @@
         <div class="task-field-group">
           <textarea class="task-desc-input" id="task-desc-input" placeholder="Add a description…" rows="3"></textarea>
         </div>
-      </div>
 
-      <!-- ADVANCED TAB -->
-      <div class="task-modal-body" id="task-tab-advanced" style="display:none;">
-        <div class="task-fields-grid">
-          <!-- Task List -->
-          <div class="task-field-block">
-            <div class="task-field-label">Task List</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><line x1="1" y1="3" x2="12" y2="3"/><line x1="1" y1="6.5" x2="12" y2="6.5"/><line x1="1" y1="10" x2="7" y2="10"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add to task list</span>
+        <!-- Advanced fields toggle -->
+        <button class="task-advanced-toggle" id="task-advanced-toggle" onclick="toggleAdvancedFields()">
+          <span id="task-advanced-label">Show Advanced Fields</span>
+          <svg class="task-advanced-toggle-chevron" id="task-advanced-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,4 6,8 10,4"/></svg>
+        </button>
+
+        <!-- Collapsible advanced fields -->
+        <div class="task-advanced-fields" id="task-advanced-fields">
+          <div class="task-fields-grid">
+            <!-- Task List -->
+            <div class="task-field-block">
+              <div class="task-field-label">Task List</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><line x1="1" y1="3" x2="12" y2="3"/><line x1="1" y1="6.5" x2="12" y2="6.5"/><line x1="1" y1="10" x2="7" y2="10"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add to task list</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Frequency -->
-          <div class="task-field-block">
-            <div class="task-field-label">Frequency</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5A5 5 0 0 1 11 3.5"/><path d="M11.5 6.5A5 5 0 0 1 2 9.5"/><path d="M9 1.5l2 2-2 2"/><path d="M4 7.5l-2 2 2 2"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Does not repeat</span>
+            <!-- Frequency -->
+            <div class="task-field-block">
+              <div class="task-field-label">Frequency</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5A5 5 0 0 1 11 3.5"/><path d="M11.5 6.5A5 5 0 0 1 2 9.5"/><path d="M9 1.5l2 2-2 2"/><path d="M4 7.5l-2 2 2 2"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Does not repeat</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Billing -->
-          <div class="task-field-block">
-            <div class="task-field-label">Billing</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5.8"/><path d="M6.5 3v1M6.5 9v1M4.5 7.5a2 2 0 0 0 4 0c0-1.1-.9-1.5-2-2s-2-.9-2-2a2 2 0 0 1 4 0"/></svg>
-              <span class="task-field-value-text">Billable</span>
+            <!-- Billing -->
+            <div class="task-field-block">
+              <div class="task-field-label">Billing</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5.8"/><path d="M6.5 3v1M6.5 9v1M4.5 7.5a2 2 0 0 0 4 0c0-1.1-.9-1.5-2-2s-2-.9-2-2a2 2 0 0 1 4 0"/></svg>
+                <span class="task-field-value-text">Billable</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Service -->
-          <div class="task-field-block">
-            <div class="task-field-label">Service</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="3" width="11" height="8" rx="1.2"/><path d="M4.5 3V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add service</span>
+            <!-- Service -->
+            <div class="task-field-block">
+              <div class="task-field-label">Service</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="3" width="11" height="8" rx="1.2"/><path d="M4.5 3V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add service</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Dependencies -->
-          <div class="task-field-block">
-            <div class="task-field-label">Dependencies</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5l2 1-2 1"/><path d="M11 6.5H7.5a3 3 0 0 1-3-3v-1"/><circle cx="3" cy="2" r="1.2"/><circle cx="10.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add dependency</span>
+            <!-- Dependencies -->
+            <div class="task-field-block">
+              <div class="task-field-label">Dependencies</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5l2 1-2 1"/><path d="M11 6.5H7.5a3 3 0 0 1-3-3v-1"/><circle cx="3" cy="2" r="1.2"/><circle cx="10.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add dependency</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Tags -->
-          <div class="task-field-block">
-            <div class="task-field-label">Tags</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1h5l5.5 5.5a1.5 1.5 0 0 1 0 2.1L8.6 11.5a1.5 1.5 0 0 1-2.1 0L1 6V1z"/><circle cx="3.5" cy="3.5" r="1"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add tag</span>
+            <!-- Tags -->
+            <div class="task-field-block">
+              <div class="task-field-label">Tags</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1h5l5.5 5.5a1.5 1.5 0 0 1 0 2.1L8.6 11.5a1.5 1.5 0 0 1-2.1 0L1 6V1z"/><circle cx="3.5" cy="3.5" r="1"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add tag</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Deal -->
-          <div class="task-field-block">
-            <div class="task-field-label">Deal</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="3.5" width="11" height="8" rx="1.2"/><path d="M4.5 3.5V2.5a2 2 0 0 1 4 0v1"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add deal</span>
+            <!-- Deal -->
+            <div class="task-field-block">
+              <div class="task-field-label">Deal</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="3.5" width="11" height="8" rx="1.2"/><path d="M4.5 3.5V2.5a2 2 0 0 1 4 0v1"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add deal</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Multi-Assignee -->
-          <div class="task-field-block">
-            <div class="task-field-label">Multi-Assignee</div>
-            <div class="task-field-value task-field-clickable">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="5" cy="4" r="2.5"/><path d="M1 11.5c0-2.2 1.8-4 4-4s4 1.8 4 4"/><circle cx="10" cy="4.5" r="1.8"/><path d="M12 11.5c0-1.7-1.3-3-3-3"/></svg>
-              <span class="task-field-value-text task-field-placeholder">Add assignee</span>
+            <!-- Multi-Assignee -->
+            <div class="task-field-block">
+              <div class="task-field-label">Multi-Assignee</div>
+              <div class="task-field-value task-field-clickable">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="5" cy="4" r="2.5"/><path d="M1 11.5c0-2.2 1.8-4 4-4s4 1.8 4 4"/><circle cx="10" cy="4.5" r="1.8"/><path d="M12 11.5c0-1.7-1.3-3-3-3"/></svg>
+                <span class="task-field-value-text task-field-placeholder">Add assignee</span>
+              </div>
             </div>
           </div>
         </div>
