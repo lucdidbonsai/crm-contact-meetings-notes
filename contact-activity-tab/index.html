@@ -1046,11 +1046,44 @@
     .task-field-placeholder { color: var(--text-lighter); }
     .task-field-value svg { flex-shrink: 0; color: var(--text-muted); }
     .task-field-value-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .task-field-assignee { border-color: transparent; background: var(--bg-grey-fa); }
+    .task-field-assignee { border-color: transparent; background: var(--bg-grey-fa); cursor: pointer; transition: background 0.1s; }
+    .task-field-assignee:hover { background: var(--bg-grey-f3); }
     .task-assignee-avatar {
       width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
       background-size: cover; background-position: center;
     }
+    /* ── Project field ── */
+    .task-field-project { position: relative; }
+    .task-project-badge {
+      width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff; letter-spacing: 0;
+    }
+    .task-project-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: #fff; border: 1px solid var(--border-content);
+      border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 200; overflow: hidden; display: none;
+    }
+    .task-project-dropdown.open { display: block; }
+    .task-project-search {
+      padding: 8px 10px; border-bottom: 1px solid var(--border-content);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .task-project-search input {
+      flex: 1; border: none; outline: none; font-size: 13px;
+      color: var(--text-default); background: transparent; font-family: inherit;
+    }
+    .task-project-search input::placeholder { color: var(--text-lighter); }
+    .task-project-list { max-height: 180px; overflow-y: auto; padding: 4px 0; }
+    .task-project-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; cursor: pointer;
+    }
+    .task-project-item:hover { background: var(--bg-grey-fa); }
+    .task-project-item-info { display: flex; flex-direction: column; min-width: 0; }
+    .task-project-item-name { font-size: 13px; font-weight: 500; color: var(--text-default); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .task-project-item-workspace { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .task-desc-input {
       width: 100%; box-sizing: border-box; resize: vertical;
       font-size: 13px; color: var(--text-default);
@@ -4722,7 +4755,7 @@
     var rawText = d.nextSteps[stepIdx] || '';
     var strippedText = stripAssigneePrefix(rawText);
     document.getElementById('task-name-input').value = strippedText;
-    var assignee = (d.nextStepAssignees && d.nextStepAssignees[stepIdx]) ? d.nextStepAssignees[stepIdx] : null;
+    var assignee = (d.nextStepAssignees && d.nextStepAssignees[stepIdx]) ? d.nextStepAssignees[stepIdx] : (d.owner || null);
     var assigneeAvatar = document.getElementById('task-assignee-avatar');
     var assigneeName = document.getElementById('task-assignee-name');
     if (assignee) {
@@ -4733,6 +4766,14 @@
       assigneeName.textContent = 'Add assignee';
       assigneeAvatar.style.display = 'none';
     }
+    // Reset project field
+    document.getElementById('task-project-name').textContent = 'Add project';
+    document.getElementById('task-project-name').classList.add('task-field-placeholder');
+    document.getElementById('task-project-badge').style.display = 'none';
+    document.getElementById('task-project-icon').style.display = '';
+    document.getElementById('task-project-field').classList.remove('task-field-active');
+    document.getElementById('task-project-dropdown').classList.remove('open');
+    renderProjectList('');
     document.getElementById('task-modal-overlay').classList.remove('hidden');
     // Reset advanced fields to collapsed
     document.getElementById('task-advanced-fields').classList.remove('task-advanced-fields--open');
@@ -4768,6 +4809,72 @@
     document.getElementById('task-modal-overlay').classList.add('hidden');
     _createTaskStepIdx = null;
   }
+
+  // ── Project dropdown ──
+  var _projects = [
+    { name: 'Bugs – Week 27', workspace: 'Bonsai Product Development', color: '#8B4513', initials: 'B' },
+    { name: 'Bugs – Week 30', workspace: 'Bonsai Product Development', color: '#8B4513', initials: 'B' },
+    { name: 'Security Items', workspace: 'Bonsai Product Development', color: '#2c2c2c', initials: 'S' },
+    { name: 'Website Redesign', workspace: 'Acme Corp', color: '#1a6b3c', initials: 'W' },
+    { name: 'Q1 Roadmap', workspace: 'Bonsai Product Development', color: '#1a4a8b', initials: 'Q' },
+    { name: 'Onboarding Flow', workspace: 'Bonsai Product Development', color: '#7b1fa2', initials: 'O' },
+  ];
+
+  function renderProjectList(query) {
+    var list = document.getElementById('task-project-list');
+    var filtered = query ? _projects.filter(function(p) { return p.name.toLowerCase().indexOf(query.toLowerCase()) > -1 || p.workspace.toLowerCase().indexOf(query.toLowerCase()) > -1; }) : _projects;
+    list.innerHTML = filtered.map(function(p) {
+      return '<div class="task-project-item" onclick="selectProject(' + JSON.stringify(p).replace(/"/g, '&quot;') + ')">' +
+        '<div class="task-project-badge" style="background:' + p.color + ';width:20px;height:20px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">' + p.initials + '</div>' +
+        '<div class="task-project-item-info"><div class="task-project-item-name">' + p.name + '</div><div class="task-project-item-workspace">' + p.workspace + '</div></div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function toggleProjectDropdown(e) {
+    e.stopPropagation();
+    var dd = document.getElementById('task-project-dropdown');
+    var isOpen = dd.classList.toggle('open');
+    document.getElementById('task-project-field').classList.toggle('task-field-active', isOpen);
+    if (isOpen) {
+      document.getElementById('task-project-search-input').value = '';
+      renderProjectList('');
+      setTimeout(function() { document.getElementById('task-project-search-input').focus(); }, 50);
+    }
+  }
+
+  function filterProjects(q) { renderProjectList(q); }
+
+  function selectProject(p) {
+    var badge = document.getElementById('task-project-badge');
+    badge.textContent = p.initials;
+    badge.style.background = p.color;
+    badge.style.display = 'flex';
+    badge.style.alignItems = 'center';
+    badge.style.justifyContent = 'center';
+    badge.style.fontSize = '10px';
+    badge.style.fontWeight = '700';
+    badge.style.color = '#fff';
+    badge.style.borderRadius = '4px';
+    badge.style.width = '20px';
+    badge.style.height = '20px';
+    badge.style.flexShrink = '0';
+    document.getElementById('task-project-icon').style.display = 'none';
+    var nameEl = document.getElementById('task-project-name');
+    nameEl.textContent = p.name;
+    nameEl.classList.remove('task-field-placeholder');
+    document.getElementById('task-project-dropdown').classList.remove('open');
+    document.getElementById('task-project-field').classList.remove('task-field-active');
+  }
+
+  // Close project dropdown on click outside
+  document.addEventListener('click', function(e) {
+    var block = document.getElementById('task-project-block');
+    if (block && !block.contains(e.target)) {
+      document.getElementById('task-project-dropdown').classList.remove('open');
+      document.getElementById('task-project-field').classList.remove('task-field-active');
+    }
+  });
 
   function toggleAdvancedFields() {
     var fields = document.getElementById('task-advanced-fields');
@@ -5446,6 +5553,23 @@
         </div>
 
         <div class="task-fields-grid">
+          <!-- Project -->
+          <div class="task-field-block task-field-project" id="task-project-block">
+            <div class="task-field-label">Project</div>
+            <div class="task-field-value task-field-clickable" id="task-project-field" onclick="toggleProjectDropdown(event)">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" id="task-project-icon"><path d="M1 4.5h11v6.5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4.5z"/><path d="M1 4.5V3.5a1 1 0 0 1 1-1h3.5l1 1.5H12a1 1 0 0 1 0 0"/></svg>
+              <div class="task-project-badge" id="task-project-badge" style="display:none;"></div>
+              <span class="task-field-value-text task-field-placeholder" id="task-project-name">Add project</span>
+            </div>
+            <div class="task-project-dropdown" id="task-project-dropdown">
+              <div class="task-project-search">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="5" cy="5" r="4"/><line x1="8.5" y1="8.5" x2="11" y2="11"/></svg>
+                <input type="text" placeholder="Search projects…" id="task-project-search-input" oninput="filterProjects(this.value)" />
+              </div>
+              <div class="task-project-list" id="task-project-list"></div>
+            </div>
+          </div>
+
           <!-- Assignee (pre-filled) -->
           <div class="task-field-block">
             <div class="task-field-label">Assignee</div>
