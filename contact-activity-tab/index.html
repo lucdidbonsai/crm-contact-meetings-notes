@@ -4790,7 +4790,7 @@
           + '<span class="mdp-ns-bullet">&#x25CF;</span>'
           + '<div class="mdp-ns-text-wrap">'
           + '<span class="mdp-ns-text">' + rawText + '</span>'
-          + '<a class="mdp-task-chip" href="#" onclick="return false;">TSK-' + state.taskId + '</a>'
+          + '<a class="mdp-task-chip" href="#" tabindex="-1" onmousedown="event.preventDefault()">TSK-' + state.taskId + '</a>'
           + '</div></div>';
       } else {
         html += '<div class="mdp-ns-item" onclick="openCreateTaskModal(' + idx + ')">'
