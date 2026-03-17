@@ -952,9 +952,6 @@
       flex: 1; min-width: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px;
     }
     .mdp-ns-text { font-size: 13px; color: var(--text-default); line-height: 1.5; }
-    .mdp-ns-item:not(.mdp-ns-item--done):hover .mdp-ns-text {
-      text-decoration: underline; text-decoration-color: #22AD01; text-underline-offset: 2px;
-    }
     .mdp-ns-item--done .mdp-ns-text { color: var(--text-muted); }
     .mdp-task-chip {
       display: inline-flex; align-items: center; gap: 4px;
@@ -971,6 +968,126 @@
       background: #1e1e1e; color: white;
       font-size: 11px; font-weight: 500; white-space: nowrap;
       padding: 4px 8px; border-radius: 5px; pointer-events: none; z-index: 100;
+    }
+
+    /* ── Transcript: word-level interaction ── */
+    .mdp-transcript-word {
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 0 1px;
+      transition: background 0.08s;
+    }
+    .mdp-transcript-word:hover { background: rgba(34,173,1,0.12); }
+    .mdp-transcript-word.tx-active {
+      background: rgba(34,173,1,0.22);
+      border-radius: 2px;
+    }
+    .mdp-transcript-word.tx-search-match {
+      background: rgba(245,158,11,0.28);
+      border-radius: 2px;
+    }
+    .mdp-transcript-word.tx-search-current {
+      background: #f59e0b;
+      color: white;
+      border-radius: 2px;
+    }
+
+    /* ── Transcript search bar ── */
+    #mdp-tab-transcript { display: flex; flex-direction: column; overflow: hidden; }
+    .mdp-tx-search-bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 40px;
+      border-bottom: 1px solid var(--border-content);
+      background: var(--bg-content);
+    }
+    .mdp-tx-search-inner {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg-grey-fa);
+      border: 1px solid var(--border-content);
+      border-radius: 6px;
+      padding: 6px 10px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .mdp-tx-search-inner:focus-within {
+      border-color: #22AD01;
+      box-shadow: 0 0 0 2.5px rgba(34,173,1,0.12);
+      background: white;
+    }
+    .mdp-tx-search-input {
+      flex: 1; border: none; outline: none;
+      background: transparent; font-size: 13px;
+      color: var(--text-default); font-family: inherit;
+    }
+    .mdp-tx-search-input::placeholder { color: var(--text-lighter); }
+    .mdp-tx-search-count {
+      font-size: 11px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; display: none;
+    }
+    .mdp-tx-search-count.visible { display: inline; }
+    .mdp-tx-search-nav { display: none; align-items: center; gap: 1px; }
+    .mdp-tx-search-nav.visible { display: flex; }
+    .mdp-tx-search-nav-btn {
+      width: 22px; height: 22px; border: none; background: none; border-radius: 4px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+    }
+    .mdp-tx-search-nav-btn:hover { background: var(--bg-grey-f1); color: var(--text-default); }
+    .mdp-tx-search-nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+    .mdp-tx-search-clear {
+      display: none; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border: none; background: none; cursor: pointer;
+      color: var(--text-muted); border-radius: 3px; font-size: 14px; line-height: 1;
+      flex-shrink: 0; padding: 0;
+    }
+    .mdp-tx-search-clear.visible { display: flex; }
+    .mdp-tx-search-clear:hover { color: var(--text-default); }
+    .mdp-tx-scroll-area { flex: 1; overflow-y: auto; position: relative; }
+
+    /* "Return to current position" floating button */
+    .mdp-tx-return-btn {
+      position: sticky; bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(22,22,22,0.88);
+      color: white; border: none; border-radius: 20px;
+      padding: 7px 14px 7px 12px;
+      font-size: 12px; font-weight: 500; cursor: pointer;
+      display: none; align-items: center; gap: 7px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 14px rgba(0,0,0,0.22);
+      white-space: nowrap; width: max-content;
+      margin: 0 auto; margin-bottom: 16px;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+    .mdp-tx-return-btn.visible { display: flex; }
+    .mdp-tx-return-btn:hover { background: rgba(10,10,10,0.95); }
+
+    /* ── Summary: chapters as h3 (no collapse) ── */
+    .mdp-ch-block { margin-bottom: 18px; }
+    .mdp-ch-block:last-child { margin-bottom: 0; }
+    .mdp-ch-h3 {
+      font-size: 13px; font-weight: 600; color: var(--text-default);
+      margin: 0 0 5px;
+    }
+    .mdp-ch-text {
+      font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0;
+    }
+
+    /* ── Next steps: bullet style ── */
+    .mdp-ns-list { padding-left: 4px; }
+    .mdp-ns-item { gap: 8px; padding: 3px 0; }
+    .mdp-ns-bullet {
+      flex-shrink: 0; font-size: 7px; color: var(--text-default);
+      line-height: 1; margin-top: 5px; width: 12px; text-align: center;
+    }
+    .mdp-ns-item--done .mdp-ns-bullet { color: var(--text-muted); }
+    .mdp-ns-item:not(.mdp-ns-item--done):hover .mdp-ns-text {
+      text-decoration: underline dotted #22AD01; text-underline-offset: 3px;
     }
 
     /* ── "Edited" label ── */
@@ -3159,7 +3276,6 @@
             <div class="mdp-subnavigation-items">
               <a class="mdp-subnav-item active" id="mdp-tab-summary-btn" onclick="switchMdpTab('summary', this)">Summary</a>
               <a class="mdp-subnav-item" id="mdp-tab-transcript-btn" onclick="switchMdpTab('transcript', this)">Transcript</a>
-              <a class="mdp-subnav-item" id="mdp-tab-comments-btn" onclick="switchMdpTab('comments', this)"><span id="mdp-comments-tab-label">Comments</span></a>
             </div>
           </div>
 
@@ -3221,25 +3337,31 @@
           </div>
 
           <!-- Transcript tab -->
-          <div class="mdp-tab-panel" id="mdp-tab-transcript" hidden>
-            <div id="mdp-transcript"></div>
-          </div>
-
-          <!-- Comments tab -->
-          <div class="mdp-tab-panel" id="mdp-tab-comments" hidden>
-            <div class="mdp-comments-wrap">
-              <div class="mdp-comments-feed" id="mdp-comments-feed"></div>
-              <div class="mdp-comment-compose-wrap">
-                <div class="mdp-comment-compose-inner">
-                  <div class="meetings-user-avatar" style="width:28px;height:28px;flex-shrink:0;background-image:url('https://ui-avatars.com/api/?name=LD&size=250&background=4c525a&color=ffffff&format=png');"></div>
-                  <div class="mdp-comment-input-wrap">
-                    <textarea class="mdp-comment-input" id="mdp-comment-input" placeholder="Add a comment..." rows="1" oninput="autoResizeComment(this)" onkeydown="handleCommentKey(event)"></textarea>
-                  </div>
-                  <button class="mdp-comment-submit" onclick="submitMeetingComment()" title="Send">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <div class="mdp-tab-panel" id="mdp-tab-transcript" hidden style="flex-direction:column;overflow:hidden;">
+            <!-- Search bar -->
+            <div class="mdp-tx-search-bar">
+              <div class="mdp-tx-search-inner">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><line x1="10" y1="10" x2="13" y2="13"/></svg>
+                <input type="text" class="mdp-tx-search-input" id="mdp-tx-search-input" placeholder="Search transcript..." oninput="txSearch()" />
+                <span class="mdp-tx-search-count" id="mdp-tx-search-count"></span>
+                <div class="mdp-tx-search-nav" id="mdp-tx-search-nav">
+                  <button class="mdp-tx-search-nav-btn" id="mdp-tx-prev-btn" onclick="txSearchNav(-1)" title="Previous">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 2L4 5l3 3"/></svg>
+                  </button>
+                  <button class="mdp-tx-search-nav-btn" id="mdp-tx-next-btn" onclick="txSearchNav(1)" title="Next">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 2l3 3-3 3"/></svg>
                   </button>
                 </div>
+                <button class="mdp-tx-search-clear" id="mdp-tx-search-clear" onclick="txSearchClear()">×</button>
               </div>
+            </div>
+            <!-- Scrollable transcript -->
+            <div class="mdp-tx-scroll-area" id="mdp-tx-scroll-area">
+              <div id="mdp-transcript"></div>
+              <button class="mdp-tx-return-btn" id="mdp-tx-return-btn" onclick="txReturnToCurrent()">
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><polyline points="6,3.5 6,6 7.5,7"/></svg>
+                Return to current position
+              </button>
             </div>
           </div>
 
@@ -4561,22 +4683,13 @@
     // Render AI suggested actions
     renderAiCallouts(d);
 
-    // Transcript
-    var txHtml = '';
-    if (d.transcript && d.transcript.length) {
-      d.transcript.forEach(function(block) {
-        txHtml += '<div class="mdp-transcript-block">'
-          + '<div class="mdp-transcript-meta">'
-          + '<span class="mdp-transcript-speaker">' + block.speaker + '</span>'
-          + '<span class="mdp-transcript-time">' + block.time + '</span>'
-          + '</div>'
-          + '<p class="mdp-transcript-text">' + block.text + '</p>'
-          + '</div>';
-      });
-    } else {
-      txHtml = '<div class="mdp-no-transcript">No transcript available for this meeting.</div>';
-    }
-    document.getElementById('mdp-transcript').innerHTML = txHtml;
+    // Transcript — word-level spans with interpolated timestamps
+    document.getElementById('mdp-transcript').innerHTML = renderTranscriptWords(d.transcript);
+    // Reset search state when a new meeting is loaded
+    txSearchClear();
+    window._txUserScrolled = false;
+    var returnBtn = document.getElementById('mdp-tx-return-btn');
+    if (returnBtn) returnBtn.classList.remove('visible');
 
     // Notes tab — populate editor if present
     var syncBar = document.getElementById('mdp-notes-sync-bar');
@@ -4592,31 +4705,7 @@
     }
     if (rteBody) rteBody.innerHTML = d.noteContent || '';
 
-    // Comments
-    var comments = d.comments || [];
-    var commentsHtml = '';
-    if (comments.length) {
-      comments.forEach(function(c) {
-        commentsHtml += '<div class="mdp-comment-item">'
-          + '<div class="meetings-user-avatar" style="width:28px;height:28px;flex-shrink:0;background-image:url(\'' + c.avatar + '\');"></div>'
-          + '<div class="mdp-comment-body">'
-          + '<div class="mdp-comment-meta"><strong>' + c.author + '</strong> · ' + c.time + '</div>'
-          + '<div class="mdp-comment-bubble">' + c.text + '</div>'
-          + '</div></div>';
-      });
-    } else {
-      commentsHtml = '<div class="mdp-comments-empty">No comments yet. Be the first to add one.</div>';
-    }
-    document.getElementById('mdp-comments-feed').innerHTML = commentsHtml;
-    document.getElementById('mdp-comment-input').value = '';
     window._currentMeetingIdx = idx;
-
-    // Update Comments tab count badge
-    var commentCount = comments.length;
-    var commentsLabel = document.getElementById('mdp-comments-tab-label');
-    commentsLabel.innerHTML = 'Comments' + (commentCount > 0
-      ? ' <span class="mdp-tab-count">' + commentCount + '</span>'
-      : ' <span class="mdp-tab-count mdp-tab-count--zero">0</span>');
 
     // Always default to Summary tab (now an editable document)
     switchMdpTab('summary', document.getElementById('mdp-tab-summary-btn'));
@@ -4652,15 +4741,11 @@
     if (chaptersEl) {
       var chapHtml = '';
       if (d.chapters && d.chapters.length) {
-        d.chapters.forEach(function(ch, i) {
-          var isOpen = i === 0;
-          chapHtml += '<div class="mdp-chapter">'
-            + '<div class="mdp-chapter-header" onclick="toggleMdpChapter(this)">'
-            + '<svg class="mdp-chapter-chevron' + (isOpen ? ' open' : '') + '" width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 1l4 4-4 4" stroke="#22AD01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-            + '<span class="mdp-chapter-title">' + ch.title + '</span>'
-            + '</div>';
+        d.chapters.forEach(function(ch) {
+          chapHtml += '<div class="mdp-ch-block">'
+            + '<h3 class="mdp-ch-h3">' + ch.title + '</h3>';
           if (ch.content) {
-            chapHtml += '<div class="mdp-chapter-content' + (isOpen ? ' open' : '') + '">' + ch.content + '</div>';
+            chapHtml += '<p class="mdp-ch-text">' + ch.content + '</p>';
           }
           chapHtml += '</div>';
         });
@@ -4684,18 +4769,14 @@
       var state = taskState[idx];
       if (state && state.taskId) {
         html += '<div class="mdp-ns-item mdp-ns-item--done">'
-          + '<div class="mdp-ns-circle mdp-ns-circle--done">'
-          + '<svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-          + '</div>'
+          + '<span class="mdp-ns-bullet">&#x25CF;</span>'
           + '<div class="mdp-ns-text-wrap">'
           + '<span class="mdp-ns-text">' + text + '</span>'
           + '<a class="mdp-task-chip" href="#" onclick="return false;">TSK-' + state.taskId + '</a>'
           + '</div></div>';
       } else {
         html += '<div class="mdp-ns-item" onclick="openCreateTaskModal(' + idx + ')">'
-          + '<div class="mdp-ns-circle">'
-          + '<svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-          + '</div>'
+          + '<span class="mdp-ns-bullet">&#x25CF;</span>'
           + '<div class="mdp-ns-text-wrap"><span class="mdp-ns-text">' + text + '</span></div>'
           + '</div>';
       }
@@ -5168,6 +5249,7 @@
 
   function submitMeetingComment() {
     var input = document.getElementById('mdp-comment-input');
+    if (!input) return;
     var text = input.value.trim();
     if (!text) return;
     var idx = window._currentMeetingIdx;
@@ -5270,6 +5352,7 @@
     if (thumb) thumb.style.left = pct + '%';
     if (timeEl) timeEl.textContent = _formatTime(_recCurrentSecs);
     if (pct >= 100) _recPause();
+    txHighlightAtTime(_recCurrentSecs);
   }
 
   function _recPlay() {
@@ -5375,27 +5458,187 @@
     }
   }
 
+  // ── Transcript: word-level rendering & interaction ──
+
+  function _parseTxTime(str) {
+    var parts = str.split(':').map(Number);
+    if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+    if (parts.length === 2) return parts[0]*60 + parts[1];
+    return 0;
+  }
+
+  function renderTranscriptWords(transcript) {
+    if (!transcript || !transcript.length) {
+      return '<div class="mdp-no-transcript">No transcript available for this meeting.</div>';
+    }
+    var WPM = 140;
+    var blocks = transcript.map(function(b) {
+      return { speaker: b.speaker, startSecs: _parseTxTime(b.time), text: b.text.trim() };
+    });
+    blocks.forEach(function(b, i) {
+      var wordCount = b.text.split(/\s+/).length;
+      var est = (wordCount / WPM) * 60;
+      if (i < blocks.length - 1) {
+        b.endSecs = Math.max(blocks[i+1].startSecs, b.startSecs + est);
+      } else {
+        b.endSecs = b.startSecs + est;
+      }
+    });
+    var html = '';
+    blocks.forEach(function(b) {
+      var words = b.text.split(/\s+/);
+      var n = words.length;
+      var dur = b.endSecs - b.startSecs;
+      html += '<div class="mdp-transcript-block">'
+        + '<div class="mdp-transcript-meta">'
+        + '<span class="mdp-transcript-speaker">' + b.speaker + '</span>'
+        + '<span class="mdp-transcript-time">' + _formatTime(b.startSecs) + '</span>'
+        + '</div><p class="mdp-transcript-text">';
+      words.forEach(function(word, wi) {
+        var t = (b.startSecs + (dur * wi / n)).toFixed(2);
+        html += '<span class="mdp-transcript-word" data-t="' + t + '" onclick="txSeekTo(' + t + ')">' + word + '</span> ';
+      });
+      html += '</p></div>';
+    });
+    return html;
+  }
+
+  function txHighlightAtTime(secs) {
+    var words = document.querySelectorAll('#mdp-transcript .mdp-transcript-word');
+    var lastActive = null;
+    words.forEach(function(w) {
+      if (parseFloat(w.getAttribute('data-t')) <= secs) lastActive = w;
+    });
+    words.forEach(function(w) { w.classList.remove('tx-active'); });
+    if (lastActive) {
+      lastActive.classList.add('tx-active');
+      // Auto-scroll transcript to the active word if user hasn't manually scrolled
+      if (!window._txUserScrolled) {
+        var scrollArea = document.getElementById('mdp-tx-scroll-area');
+        var txPanel = document.getElementById('mdp-tab-transcript');
+        if (scrollArea && txPanel && txPanel.style.display !== 'none') {
+          var wRect = lastActive.getBoundingClientRect();
+          var sRect = scrollArea.getBoundingClientRect();
+          if (wRect.bottom > sRect.bottom - 40 || wRect.top < sRect.top + 40) {
+            lastActive.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }
+    }
+  }
+
+  function txSeekTo(secs) {
+    if (_recTotalSecs <= 0) return;
+    _recSetProgress((secs / _recTotalSecs) * 100);
+    window._txUserScrolled = false;
+    var returnBtn = document.getElementById('mdp-tx-return-btn');
+    if (returnBtn) returnBtn.classList.remove('visible');
+  }
+
+  // Transcript search state
+  var _txSearchMatches = [];
+  var _txSearchIdx = 0;
+
+  function txSearch() {
+    var input = document.getElementById('mdp-tx-search-input');
+    var query = input ? input.value.trim() : '';
+    var countEl = document.getElementById('mdp-tx-search-count');
+    var navEl = document.getElementById('mdp-tx-search-nav');
+    var clearBtn = document.getElementById('mdp-tx-search-clear');
+
+    // Clear previous highlights
+    document.querySelectorAll('#mdp-transcript .tx-search-match, #mdp-transcript .tx-search-current').forEach(function(w) {
+      w.classList.remove('tx-search-match', 'tx-search-current');
+    });
+    _txSearchMatches = [];
+    _txSearchIdx = 0;
+
+    if (!query) {
+      if (countEl) { countEl.classList.remove('visible'); countEl.textContent = ''; }
+      if (navEl) navEl.classList.remove('visible');
+      if (clearBtn) clearBtn.classList.remove('visible');
+      return;
+    }
+    if (clearBtn) clearBtn.classList.add('visible');
+
+    var re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    var words = document.querySelectorAll('#mdp-transcript .mdp-transcript-word');
+    words.forEach(function(w) {
+      re.lastIndex = 0;
+      if (re.test(w.textContent)) {
+        w.classList.add('tx-search-match');
+        _txSearchMatches.push(w);
+      }
+    });
+
+    if (countEl) {
+      countEl.classList.add('visible');
+      if (_txSearchMatches.length > 0) {
+        _txSearchMatches[0].classList.remove('tx-search-match');
+        _txSearchMatches[0].classList.add('tx-search-current');
+        _txSearchMatches[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        countEl.textContent = '1/' + _txSearchMatches.length;
+      } else {
+        countEl.textContent = '0';
+      }
+    }
+    if (navEl) {
+      if (_txSearchMatches.length > 1) navEl.classList.add('visible');
+      else navEl.classList.remove('visible');
+    }
+  }
+
+  function txSearchNav(dir) {
+    if (!_txSearchMatches.length) return;
+    _txSearchMatches[_txSearchIdx].classList.remove('tx-search-current');
+    _txSearchMatches[_txSearchIdx].classList.add('tx-search-match');
+    _txSearchIdx = (_txSearchIdx + dir + _txSearchMatches.length) % _txSearchMatches.length;
+    _txSearchMatches[_txSearchIdx].classList.remove('tx-search-match');
+    _txSearchMatches[_txSearchIdx].classList.add('tx-search-current');
+    _txSearchMatches[_txSearchIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var countEl = document.getElementById('mdp-tx-search-count');
+    if (countEl) countEl.textContent = (_txSearchIdx + 1) + '/' + _txSearchMatches.length;
+  }
+
+  function txSearchClear() {
+    var input = document.getElementById('mdp-tx-search-input');
+    if (input) input.value = '';
+    txSearch();
+  }
+
+  function txReturnToCurrent() {
+    var active = document.querySelector('#mdp-transcript .mdp-transcript-word.tx-active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var returnBtn = document.getElementById('mdp-tx-return-btn');
+    if (returnBtn) returnBtn.classList.remove('visible');
+    window._txUserScrolled = false;
+  }
+
+  // Show "Return to current position" button when user scrolls away during playback
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+      var scrollArea = document.getElementById('mdp-tx-scroll-area');
+      if (scrollArea) {
+        scrollArea.addEventListener('scroll', function() {
+          if (_recPlaying) {
+            window._txUserScrolled = true;
+            var returnBtn = document.getElementById('mdp-tx-return-btn');
+            if (returnBtn) returnBtn.classList.add('visible');
+          }
+        });
+      }
+    });
+  })();
+
   function switchMdpTab(tab, el) {
     document.querySelectorAll('.mdp-subnav-item').forEach(function(t) { t.classList.remove('active'); });
     if (el) el.classList.add('active');
-    var panels = ['mdp-tab-summary', 'mdp-tab-transcript', 'mdp-tab-comments'];
-    panels.forEach(function(id) {
+    ['mdp-tab-summary', 'mdp-tab-transcript'].forEach(function(id) {
       var p = document.getElementById(id);
-      if (!p) return;
-      if (id === 'mdp-tab-summary') {
-        p.style.display = 'none';
-      } else {
-        p.hidden = true;
-      }
+      if (p) p.style.display = 'none';
     });
     var active = document.getElementById('mdp-tab-' + tab);
-    if (active) {
-      if (tab === 'summary') {
-        active.style.display = 'flex';
-      } else {
-        active.hidden = false;
-      }
-    }
+    if (active) { active.style.display = 'flex'; active.removeAttribute('hidden'); }
   }
 
   function toggleMdpChapter(headerEl) {
