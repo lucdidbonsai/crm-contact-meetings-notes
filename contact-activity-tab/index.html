@@ -4784,22 +4784,18 @@
     var taskState = window._nsTaskState || {};
     var html = '';
     steps.forEach(function(rawText, idx) {
-      var text = stripAssigneePrefix(rawText);
       var state = taskState[idx];
-      var assignee = getAssigneeName(rawText);
-      var assigneeHtml = assignee ? '<span class="mdp-ns-assignee">' + assignee + '</span>' : '';
       if (state && state.taskId) {
         html += '<div class="mdp-ns-item mdp-ns-item--done">'
           + '<span class="mdp-ns-bullet">&#x25CF;</span>'
           + '<div class="mdp-ns-text-wrap">'
-          + assigneeHtml
-          + '<span class="mdp-ns-text">' + text + '</span>'
+          + '<span class="mdp-ns-text">' + rawText + '</span>'
           + '<a class="mdp-task-chip" href="#" onclick="return false;">TSK-' + state.taskId + '</a>'
           + '</div></div>';
       } else {
         html += '<div class="mdp-ns-item" onclick="openCreateTaskModal(' + idx + ')">'
           + '<span class="mdp-ns-bullet">&#x25CF;</span>'
-          + '<div class="mdp-ns-text-wrap">' + assigneeHtml + '<span class="mdp-ns-text">' + text + '</span></div>'
+          + '<div class="mdp-ns-text-wrap"><span class="mdp-ns-text">' + rawText + '</span></div>'
           + '</div>';
       }
     });
