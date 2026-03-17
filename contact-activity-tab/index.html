@@ -990,7 +990,10 @@
       font-size: 11px; font-weight: 600; color: #16830b;
       text-decoration: none !important; cursor: pointer; white-space: nowrap; flex-shrink: 0;
     }
-    .mdp-task-chip:hover { background: rgba(34,173,1,0.14); color: #16830b !important; }
+    .mdp-task-chip:hover, .mdp-task-chip:focus, .mdp-task-chip:visited, .mdp-task-chip:active {
+      background: rgba(34,173,1,0.14); color: #16830b !important;
+      text-decoration: none !important; outline: none;
+    }
     /* "Create Task" tooltip */
     .mdp-ns-item:not(.mdp-ns-item--done):hover::before {
       content: 'Create Task';
