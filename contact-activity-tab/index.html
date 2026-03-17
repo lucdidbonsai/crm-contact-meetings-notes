@@ -908,7 +908,7 @@
 
     /* ── Summary v2 — structured sections ── */
     .mdp-v2-section {
-      padding: 22px 40px;
+      padding: 11px 40px;
     }
     .mdp-v2-section-title {
       font-size: 15px; font-weight: 600; color: var(--text-default);
@@ -923,9 +923,41 @@
       padding: 4px 6px; margin: -4px -6px;
       outline: 2px solid rgba(34,173,1,0.2);
     }
-    .mdp-v2-section--editable:hover .mdp-v2-body:not([contenteditable="true"]) {
+    .mdp-v2-section--editable:hover .mdp-v2-body:not([contenteditable="true"]),
+    .mdp-v2-section--editable:hover .mdp-chapters-list:not([contenteditable="true"]) {
       background: var(--bg-grey-fc); border-radius: 4px;
       padding: 4px 6px; margin: -4px -6px; cursor: text;
+    }
+    .mdp-chapters-list[contenteditable="true"] {
+      cursor: text; padding: 4px 6px; margin: -4px -6px;
+      outline: 2px solid rgba(34,173,1,0.2); border-radius: 4px;
+    }
+    /* Section title row (title + edit button) */
+    .mdp-v2-section-title-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .mdp-v2-section-title-row .mdp-v2-section-title { margin-bottom: 0; }
+    /* Edit button on section title */
+    .mdp-section-edit-btn {
+      opacity: 0; border: none; background: none; cursor: pointer;
+      padding: 3px 8px; border-radius: 4px; color: var(--text-muted);
+      font-size: 11px; font-weight: 500; font-family: inherit;
+      transition: opacity 0.15s, background 0.12s, color 0.12s;
+      flex-shrink: 0; display: flex; align-items: center; gap: 4px;
+    }
+    .mdp-v2-section:hover .mdp-section-edit-btn { opacity: 1; }
+    .mdp-section-edit-btn:hover { background: var(--bg-grey-f1); color: var(--text-default); }
+    .mdp-section-edit-btn.editing { opacity: 1; color: #22AD01; background: rgba(34,173,1,0.07); }
+    /* Next steps edit area */
+    #mdp-ns-edit-area {
+      display: none; font-size: 13px; color: var(--text-default); line-height: 1.65;
+      border-radius: 4px; outline: none; min-height: 60px;
+      white-space: pre-wrap; font-family: inherit;
+    }
+    #mdp-ns-edit-area[contenteditable="true"] {
+      outline: 2px solid rgba(34,173,1,0.2); cursor: text;
+      padding: 6px 8px; border-radius: 4px;
     }
 
     /* ── Interactive Next Steps ── */
@@ -962,7 +994,7 @@
     /* "Create Task" tooltip */
     .mdp-ns-item:not(.mdp-ns-item--done):hover::before {
       content: 'Create Task';
-      position: absolute; bottom: calc(100% + 2px); left: 12px;
+      position: absolute; bottom: calc(100% + 2px); left: var(--tooltip-x, 12px);
       background: #1e1e1e; color: white;
       font-size: 11px; font-weight: 500; white-space: nowrap;
       padding: 4px 8px; border-radius: 5px; pointer-events: none; z-index: 100;
@@ -3318,12 +3350,19 @@
 
               <!-- 2. Next Steps -->
               <div class="mdp-v2-section" id="mdp-v2-next-steps">
-                <h2 class="mdp-v2-section-title">Next Steps</h2>
+                <div class="mdp-v2-section-title-row">
+                  <h2 class="mdp-v2-section-title" style="margin-bottom:0;">Next Steps</h2>
+                  <button class="mdp-section-edit-btn" id="mdp-ns-edit-btn" onclick="event.stopPropagation(); toggleNextStepsEdit();">
+                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 1.5l3 3-8 8H1.5v-3l8-8z"/></svg>
+                    Edit
+                  </button>
+                </div>
                 <div class="mdp-ns-list" id="mdp-ns-list"></div>
+                <div id="mdp-ns-edit-area"></div>
               </div>
 
               <!-- 3. Summary (renamed from Chapters) -->
-              <div class="mdp-v2-section" id="mdp-v2-summary">
+              <div class="mdp-v2-section mdp-v2-section--editable" id="mdp-v2-summary" onclick="activateSectionEdit(event, 'mdp-v2-chapters')">
                 <h2 class="mdp-v2-section-title">Summary</h2>
                 <div class="mdp-chapters-list" id="mdp-v2-chapters"></div>
               </div>
@@ -4741,6 +4780,7 @@
     var chaptersEl = document.getElementById('mdp-v2-chapters');
     var summarySection = document.getElementById('mdp-v2-summary');
     if (chaptersEl) {
+      chaptersEl.setAttribute('contenteditable', 'false');
       var chapHtml = '';
       if (d.chapters && d.chapters.length) {
         d.chapters.forEach(function(ch) {
@@ -4805,11 +4845,13 @@
     return null;
   }
 
-  // ── Section edit (Quick Recap click-to-edit) ──
+  // ── Section edit (click-to-edit) ──
   function activateSectionEdit(event, bodyId) {
     var body = document.getElementById(bodyId);
     if (!body || body.getAttribute('contenteditable') === 'true') return;
     body.setAttribute('contenteditable', 'true');
+    body.oninput = onSummaryEdit;
+    body.onblur = function() { deactivateSectionEdit(body); };
     body.focus();
     // Place cursor at end
     var range = document.createRange();
@@ -4821,6 +4863,53 @@
   }
   function deactivateSectionEdit(el) {
     el.setAttribute('contenteditable', 'false');
+  }
+
+  // ── Next Steps edit mode ──
+  function toggleNextStepsEdit() {
+    var editArea = document.getElementById('mdp-ns-edit-area');
+    var btn = document.getElementById('mdp-ns-edit-btn');
+    if (editArea.getAttribute('contenteditable') === 'true') {
+      saveNextStepsEdit();
+      return;
+    }
+    var d = meetingData[window._currentMeetingIdx];
+    var steps = d.nextSteps || [];
+    editArea.textContent = steps.join('\n');
+    editArea.style.display = 'block';
+    document.getElementById('mdp-ns-list').style.display = 'none';
+    editArea.setAttribute('contenteditable', 'true');
+    editArea.oninput = onSummaryEdit;
+    editArea.onblur = saveNextStepsEdit;
+    btn.classList.add('editing');
+    btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 12l10-10M7 2l5 5"/></svg> Done';
+    editArea.focus();
+    var range = document.createRange();
+    range.selectNodeContents(editArea);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function saveNextStepsEdit() {
+    var editArea = document.getElementById('mdp-ns-edit-area');
+    var btn = document.getElementById('mdp-ns-edit-btn');
+    if (editArea.getAttribute('contenteditable') !== 'true') return;
+    var d = meetingData[window._currentMeetingIdx];
+    var text = editArea.textContent || '';
+    var steps = text.split('\n').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+    d.nextSteps = steps;
+    editArea.setAttribute('contenteditable', 'false');
+    editArea.onblur = null;
+    editArea.style.display = 'none';
+    document.getElementById('mdp-ns-list').style.display = '';
+    if (btn) {
+      btn.classList.remove('editing');
+      btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 1.5l3 3-8 8H1.5v-3l8-8z"/></svg> Edit';
+    }
+    window._nsTaskState = {};
+    renderNextStepsV2(d);
   }
 
   function onSummaryEdit() {
@@ -4846,7 +4935,21 @@
     var rawText = d.nextSteps[stepIdx] || '';
     var strippedText = stripAssigneePrefix(rawText);
     document.getElementById('task-name-input').value = strippedText;
-    var assignee = (d.nextStepAssignees && d.nextStepAssignees[stepIdx]) ? d.nextStepAssignees[stepIdx] : (d.owner || null);
+    var assignee = null;
+    if (d.nextStepAssignees && d.nextStepAssignees[stepIdx]) {
+      assignee = d.nextStepAssignees[stepIdx];
+    } else {
+      var parsedName = getAssigneeName(rawText);
+      if (parsedName) {
+        var allPeople = [d.owner].concat(d.invitees || []);
+        for (var pi = 0; pi < allPeople.length; pi++) {
+          if (allPeople[pi].name.toLowerCase().indexOf(parsedName.toLowerCase()) === 0) {
+            assignee = allPeople[pi]; break;
+          }
+        }
+      }
+      if (!assignee) assignee = d.owner || null;
+    }
     var assigneeAvatar = document.getElementById('task-assignee-avatar');
     var assigneeName = document.getElementById('task-assignee-name');
     if (assignee) {
@@ -5768,6 +5871,21 @@
     noteBody.appendChild(editArea);
     noteBody.querySelector('.note-composer-body').focus();
   }
+
+  // ── Tooltip position tracking for next steps ──
+  document.addEventListener('DOMContentLoaded', function() {
+    var nsSection = document.getElementById('mdp-v2-next-steps');
+    if (nsSection) {
+      nsSection.addEventListener('mousemove', function(e) {
+        var item = e.target.closest && e.target.closest('.mdp-ns-item:not(.mdp-ns-item--done)');
+        if (item) {
+          var rect = item.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          item.style.setProperty('--tooltip-x', Math.max(0, x) + 'px');
+        }
+      });
+    }
+  });
 
   // ── Delete a note ──
   var _noteItemToDelete = null;
