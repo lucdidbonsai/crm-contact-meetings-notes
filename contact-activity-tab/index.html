@@ -909,9 +909,7 @@
     /* ── Summary v2 — structured sections ── */
     .mdp-v2-section {
       padding: 22px 40px;
-      border-bottom: 1px solid var(--border-content);
     }
-    .mdp-v2-section:last-child { border-bottom: none; }
     .mdp-v2-section-title {
       font-size: 15px; font-weight: 600; color: var(--text-default);
       margin: 0 0 10px; line-height: 1.4;
@@ -1075,12 +1073,16 @@
       margin: 0 0 5px;
     }
     .mdp-ch-text {
-      font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0;
+      font-size: 13px; color: var(--text-default); line-height: 1.6; margin: 0;
     }
 
     /* ── Next steps: bullet style ── */
     .mdp-ns-list { padding-left: 4px; }
     .mdp-ns-item { gap: 8px; padding: 3px 0; }
+    .mdp-ns-assignee {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      flex-shrink: 0; white-space: nowrap;
+    }
     .mdp-ns-bullet {
       flex-shrink: 0; font-size: 7px; color: var(--text-default);
       line-height: 1; margin-top: 5px; width: 12px; text-align: center;
@@ -4767,17 +4769,20 @@
     steps.forEach(function(rawText, idx) {
       var text = stripAssigneePrefix(rawText);
       var state = taskState[idx];
+      var assignee = getAssigneeName(rawText);
+      var assigneeHtml = assignee ? '<span class="mdp-ns-assignee">' + assignee + '</span>' : '';
       if (state && state.taskId) {
         html += '<div class="mdp-ns-item mdp-ns-item--done">'
           + '<span class="mdp-ns-bullet">&#x25CF;</span>'
           + '<div class="mdp-ns-text-wrap">'
+          + assigneeHtml
           + '<span class="mdp-ns-text">' + text + '</span>'
           + '<a class="mdp-task-chip" href="#" onclick="return false;">TSK-' + state.taskId + '</a>'
           + '</div></div>';
       } else {
         html += '<div class="mdp-ns-item" onclick="openCreateTaskModal(' + idx + ')">'
           + '<span class="mdp-ns-bullet">&#x25CF;</span>'
-          + '<div class="mdp-ns-text-wrap"><span class="mdp-ns-text">' + text + '</span></div>'
+          + '<div class="mdp-ns-text-wrap">' + assigneeHtml + '<span class="mdp-ns-text">' + text + '</span></div>'
           + '</div>';
       }
     });
@@ -4786,13 +4791,18 @@
 
   function stripAssigneePrefix(text) {
     var colonIdx = text.indexOf(': ');
-    if (colonIdx > 0 && colonIdx < 70) {
-      var prefix = text.substring(0, colonIdx);
-      if (/\(/.test(prefix)) {
-        return text.substring(colonIdx + 2);
-      }
+    if (colonIdx > 0 && colonIdx < 40) {
+      return text.substring(colonIdx + 2);
     }
     return text;
+  }
+
+  function getAssigneeName(text) {
+    var colonIdx = text.indexOf(': ');
+    if (colonIdx > 0 && colonIdx < 40) {
+      return text.substring(0, colonIdx).split(' ')[0];
+    }
+    return null;
   }
 
   // ── Section edit (Quick Recap click-to-edit) ──
