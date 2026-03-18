@@ -1138,22 +1138,26 @@
     /* ── Task Creation Modal ── */
     .task-modal-dialog { width: 500px; border-radius: 10px; overflow: hidden; }
     .task-modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 14px 24px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px 24px 14px;
       border-bottom: 1px solid var(--border-content);
     }
     .task-modal-title { font-size: 16px; font-weight: 600; color: var(--text-default); }
+    .task-title-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .task-title-row .task-name-input { flex: 1; width: auto; }
     .task-status-btn {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 10px 5px 8px; border-radius: 6px;
-      border: 1px solid var(--border-content); background: #fff;
-      font-size: 13px; font-weight: 500; color: var(--text-default);
-      cursor: pointer; transition: border-color 0.1s, background 0.1s;
-      font-family: inherit; white-space: nowrap;
+      padding: 7px 10px 7px 10px; border-radius: 6px;
+      border: none; background: #ede9fe;
+      font-size: 13px; font-weight: 500; color: #5b21b6;
+      cursor: pointer; transition: background 0.1s;
+      font-family: inherit; white-space: nowrap; flex-shrink: 0;
     }
-    .task-status-btn:hover { border-color: var(--border-content-alt, #ddd); background: var(--bg-grey-fc); }
-    .task-status-btn .task-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .task-status-btn .task-status-chevron { color: var(--text-lighter); margin-left: 2px; }
+    .task-status-btn:hover { background: #ddd6fe; }
+    .task-status-btn .task-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #7c3aed; }
+    .task-status-btn .task-status-chevron { color: #7c3aed; opacity: 0.7; margin-left: 1px; }
     .task-modal-body { padding: 20px 24px; }
     .task-advanced-toggle {
       display: inline-flex; align-items: center; gap: 6px;
@@ -1201,18 +1205,21 @@
     .task-field-value {
       display: flex; align-items: center; gap: 8px;
       font-size: 13px; color: var(--text-default);
-      padding: 7px 10px; border-radius: 6px;
-      border: 1px solid var(--border-field);
-      background: var(--bg-field, #fff);
+      padding: 4px 0;
+      border: none; background: transparent;
     }
-    .task-field-clickable { cursor: pointer; transition: border-color 0.1s, background 0.1s; }
-    .task-field-clickable:hover { border-color: var(--border-content-alt, #ddd); background: var(--bg-grey-fc); }
-    .task-field-clickable.task-field-active { border-color: #22AD01; }
+    .task-field-clickable { cursor: pointer; }
+    .task-field-clickable:hover { color: var(--text-default); }
     .task-field-placeholder { color: var(--text-lighter); }
     .task-field-value svg { flex-shrink: 0; color: var(--text-muted); }
     .task-field-value-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .task-field-assignee { border-color: transparent; background: var(--bg-grey-fa); cursor: pointer; transition: background 0.1s; }
-    .task-field-assignee:hover { background: var(--bg-grey-f3); }
+    .task-field-assignee { cursor: pointer; }
+    .task-add-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--text-lighter);
+      cursor: pointer; text-decoration: none;
+    }
+    .task-add-link:hover { color: var(--text-muted); text-decoration: none; }
     .task-assignee-avatar {
       width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
       background-size: cover; background-position: center;
@@ -5899,17 +5906,17 @@
       <!-- Header -->
       <div class="task-modal-header">
         <span class="task-modal-title">New Task</span>
-        <button class="task-status-btn" id="task-status-btn" onclick="this.classList.toggle('task-field-active')">
-          <span class="task-status-dot" id="task-status-dot" style="background:#9CA3AF;"></span>
-          <span id="task-status-name">Backlog</span>
-          <svg class="task-status-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
-        </button>
       </div>
 
       <!-- BODY -->
       <div class="task-modal-body" id="task-tab-details">
-        <div class="task-field-group">
+        <div class="task-title-row">
           <input type="text" class="task-name-input" id="task-name-input" placeholder="Task name" autocomplete="off" />
+          <button class="task-status-btn" id="task-status-btn">
+            <span class="task-status-dot"></span>
+            <span id="task-status-name">Backlog</span>
+            <svg class="task-status-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+          </button>
         </div>
 
         <div class="task-fields-grid">
@@ -6058,19 +6065,19 @@
             <!-- Files -->
             <div class="task-field-block">
               <div class="task-field-label">Files</div>
-              <div class="task-field-value task-field-clickable">
+              <a href="#" class="task-add-link" onclick="return false;">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4.5L7.5 1z"/><path d="M7.5 1v3.5H11"/></svg>
-                <span class="task-field-value-text task-field-placeholder">Add file</span>
-              </div>
+                + Add File
+              </a>
             </div>
 
             <!-- Subtasks -->
             <div class="task-field-block">
               <div class="task-field-label">Subtasks</div>
-              <div class="task-field-value task-field-clickable">
+              <a href="#" class="task-add-link" onclick="return false;">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="7" y="7" width="5" height="5" rx="1"/><path d="M3.5 6v1.5a2 2 0 0 0 2 2H7"/></svg>
-                <span class="task-field-value-text task-field-placeholder">Add subtask</span>
-              </div>
+                + Add Subtask
+              </a>
             </div>
           </div>
         </div>
