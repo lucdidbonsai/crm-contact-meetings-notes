@@ -1199,8 +1199,8 @@
     }
     .task-field-block {}
     .task-field-label {
-      font-size: 11px; font-weight: 600; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px;
+      font-size: 13px; font-weight: 500; color: var(--text-default);
+      margin-bottom: 6px;
     }
     .task-field-value {
       display: flex; align-items: center; gap: 8px;
@@ -1215,11 +1215,12 @@
     .task-field-value-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .task-field-assignee { cursor: pointer; }
     .task-add-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; color: var(--text-lighter);
+      display: inline-flex; align-items: center; gap: 0;
+      font-size: 13px; color: var(--text-muted);
       cursor: pointer; text-decoration: none;
     }
-    .task-add-link:hover { color: var(--text-muted); text-decoration: none; }
+    .task-add-link:hover { color: var(--text-default) !important; text-decoration: none; }
+    .task-full-row { margin-bottom: 14px; }
     .task-assignee-avatar {
       width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
       background-size: cover; background-position: center;
@@ -6062,24 +6063,19 @@
               </div>
             </div>
 
-            <!-- Files -->
-            <div class="task-field-block">
-              <div class="task-field-label">Files</div>
-              <a href="#" class="task-add-link" onclick="return false;">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4.5L7.5 1z"/><path d="M7.5 1v3.5H11"/></svg>
-                + Add File
-              </a>
-            </div>
-
-            <!-- Subtasks -->
-            <div class="task-field-block">
-              <div class="task-field-label">Subtasks</div>
-              <a href="#" class="task-add-link" onclick="return false;">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="7" y="7" width="5" height="5" rx="1"/><path d="M3.5 6v1.5a2 2 0 0 0 2 2H7"/></svg>
-                + Add Subtask
-              </a>
-            </div>
           </div>
+        </div>
+
+        <!-- Files — full-width row -->
+        <div class="task-full-row">
+          <div class="task-field-label">Files</div>
+          <a href="#" class="task-add-link" onclick="return false;">+ Add File</a>
+        </div>
+
+        <!-- Subtasks — full-width row -->
+        <div class="task-full-row">
+          <div class="task-field-label">Subtasks</div>
+          <a href="#" class="task-add-link" onclick="return false;">+ Add Subtask</a>
         </div>
       </div>
 
